@@ -1,0 +1,20 @@
+import os
+Import("env")
+Import("env_modules")
+
+module_env = env.Clone()
+
+module_env.Append(CPPDEFINES=["GODUM_MODULE"])
+
+def getSubdirs(path:str):
+    result = []
+    for root, folders, _ in os.walk(path):
+        for folder in folders:
+            result.append(os.path.join(root, folder))
+    return result
+
+# sources = Glob("*.cpp")
+module_env.add_source_files(env.modules_sources, "*.cpp")
+for path in getSubdirs("./"):
+    module_env.add_source_files(env.modules_sources, os.path.join(path, "*.cpp"))
+
