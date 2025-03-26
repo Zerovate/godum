@@ -15,7 +15,7 @@ env.Append(CPPDEFINES=["GODUM_GDEXTENSION"])
 env.Append(CPPPATH=["src"])
 
 def getSubdirs(path:str):
-    result = []
+    result = [path]
     for root, folders, _ in os.walk(path):
         for folder in folders:
             result.append(os.path.join(root, folder))

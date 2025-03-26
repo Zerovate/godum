@@ -1,15 +1,21 @@
 #include "register_types.h"
 
-#include "controller/controller.h"
-#include "controller/input_controller.h"
+#include "engine/controller.h"
+#include "godum.h"
+#include "input/enhanced_input_map.h"
+#include "input/input_controller.h"
+#include "input/input_device.h"
 #include "player/player.h"
 
 void initialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	GDREGISTER_CLASS(Godum);
 	GDREGISTER_CLASS(Controller);
+	GDREGISTER_CLASS(EnhancedInputMap);
 	GDREGISTER_CLASS(InputController);
+	GDREGISTER_CLASS(InputDevice);
 	GDREGISTER_CLASS(Player);
 }
 
