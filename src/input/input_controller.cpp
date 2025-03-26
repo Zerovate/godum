@@ -30,10 +30,11 @@ void InputController::_setup_device_actions() {
 	InputMap *input_map = InputMap::get_singleton();
 
 	// remove all actions created before.
-	if (!m_device_actions.is_empty()) {
-		for (int i = 0; i < m_device_actions.size(); i++) {
-			input_map->erase_action(m_device_actions[i]);
+	if (!m_built_in_action_map.is_empty()) {
+		for (auto action : m_built_in_action_map) {
+			input_map->erase_action(action.key);
 		}
+		m_built_in_action_map.clear();
 	}
 
 	// add new actions.
@@ -43,20 +44,23 @@ void InputController::_setup_device_actions() {
 		if (action.begins_with("ui_")) {
 			continue;
 		}
+		TypedArray<InputEvent> events = input_map->action_get_events(action);
+		TypedArray<InputEvent> filtered_events = _filter_events_by_device(events);
+		if (filtered_events.is_empty()) {
+			continue;
+		}
 		auto action_ext = _action_with_ext(action);
 		if (action_ext != action) {
-			TypedArray<InputEvent> events = input_map->action_get_events(action);
-			TypedArray<InputEvent> filtered_events = _filter_events_by_device(events);
 			input_map->add_action(action_ext);
 			for (int j = 0; j < filtered_events.size(); j++) {
 				input_map->action_add_event(action_ext, filtered_events[j]);
 			}
-			m_device_actions.push_back(action_ext);
 		}
+		m_built_in_action_map[action] = action_ext;
 	}
 }
 
-StringName InputController::_action_with_ext(StringName p_action) {
+StringName InputController::_action_with_ext(const StringName &p_action) const {
 	if (m_device.is_valid()) {
 		switch (m_device->get_type()) {
 			case InputDevice::DeviceType::DEVICETYPE_KEYBOARD:
@@ -98,4 +102,6 @@ void InputController::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_device"), &InputController::get_device);
 	ClassDB::bind_method(D_METHOD("set_device", "device"), &InputController::set_device);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "device", PROPERTY_HINT_RESOURCE_TYPE, "InputDevice"), "set_device", "get_device");
+
+	ClassDB::bind_method(D_METHOD("get_built_in_action", "action"), &InputController::get_built_in_action);
 }
