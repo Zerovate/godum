@@ -37,7 +37,8 @@ void InputController::_setup_device_actions() {
 		for (auto action : m_built_in_action_map) {
 			// action has no ext will not be deleted.
 			if (action.key != action.value) {
-				input_map->erase_action(action.key);
+				// print_line("InputMap remove action: ", action.key, " -> ", action.value);
+				input_map->erase_action(action.value);
 			}
 		}
 		m_built_in_action_map.clear();
@@ -47,7 +48,7 @@ void InputController::_setup_device_actions() {
 	TypedArray<StringName> actions = input_map->get_actions();
 	for (int i = 0; i < actions.size(); i++) {
 		StringName action = actions[i];
-		if (action.begins_with("ui_")) {
+		if (action.begins_with("ui_") || action.ends_with("_keyboard") || action.ends_with("_joypad")) {
 			continue;
 		}
 		TypedArray<InputEvent> events = input_map->action_get_events(action);
@@ -61,7 +62,7 @@ void InputController::_setup_device_actions() {
 			for (int j = 0; j < filtered_events.size(); j++) {
 				input_map->action_add_event(action_ext, filtered_events[j]);
 			}
-			print_verbose("InputMap add action: ", action_ext);
+			// print_line("InputMap add action: ", action_ext);
 		}
 		m_built_in_action_map[action] = action_ext;
 	}
@@ -71,9 +72,9 @@ StringName InputController::_action_with_ext(const StringName &p_action) const {
 	if (m_device.is_valid()) {
 		switch (m_device->get_type()) {
 			case InputDevice::DeviceType::DEVICETYPE_KEYBOARD:
-				return String(p_action) + "_k";
+				return String(p_action) + "_keyboard";
 			case InputDevice::DeviceType::DEVICETYPE_JOYPAD:
-				return String(p_action) + "_j_" + itos(m_device->get_id());
+				return String(p_action) + "_" + itos(m_device->get_id()) + "_joypad";
 		}
 	}
 	return p_action;
