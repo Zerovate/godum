@@ -1,6 +1,11 @@
 import os
 
-env = SConscript("E:/Project/Perforce/3rdparty/godot-cpp/Sconstruct")
+AddOption("--godot_cpp_path", dest='godot_cpp_path', type='string', action='store', metavar='DIR', help='must have a godot-cpp path')
+godot_cpp_path = GetOption('godot_cpp_path')
+if not godot_cpp_path:
+    print("must have a godot_cpp_path")
+    Exit(1)
+env = SConscript(os.path.join(godot_cpp_path, "Sconstruct"))
 
 VariantDir('build', 'src', duplicate=0)
 

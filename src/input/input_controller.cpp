@@ -16,6 +16,9 @@ void InputController::_ready() {
 	_setup_device_actions();
 }
 
+StringName InputController::get_built_in_action(const StringName &p_action) const {
+	return m_built_in_action_map.has(p_action) ? m_built_in_action_map[p_action] : "";
+}
 void InputController::set_device(const Ref<InputDevice> &p_device) {
 	if (m_device == p_device) {
 		return;
@@ -32,7 +35,10 @@ void InputController::_setup_device_actions() {
 	// remove all actions created before.
 	if (!m_built_in_action_map.is_empty()) {
 		for (auto action : m_built_in_action_map) {
-			input_map->erase_action(action.key);
+			// action has no ext will not be deleted.
+			if (action.key != action.value) {
+				input_map->erase_action(action.key);
+			}
 		}
 		m_built_in_action_map.clear();
 	}
@@ -55,6 +61,7 @@ void InputController::_setup_device_actions() {
 			for (int j = 0; j < filtered_events.size(); j++) {
 				input_map->action_add_event(action_ext, filtered_events[j]);
 			}
+			print_verbose("InputMap add action: ", action_ext);
 		}
 		m_built_in_action_map[action] = action_ext;
 	}

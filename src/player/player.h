@@ -16,6 +16,7 @@ class Player : public Node {
 
 public:
 	Player();
+	~Player();
 
 	TypedArray<Controller> get_controllers(const StringName &name) const;
 

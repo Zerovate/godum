@@ -6,6 +6,11 @@ Player::Player() {
 	connect("child_exiting_tree", Callable(this, "_on_child_exiting_tree"));
 }
 
+Player::~Player() {
+	disconnect("child_entered_tree", Callable(this, "_on_child_entered_tree"));
+	disconnect("child_exiting_tree", Callable(this, "_on_child_exiting_tree"));
+}
+
 TypedArray<Controller> Player::get_controllers(const StringName &name) const {
 	TypedArray<Controller> res;
 	for (auto idx = 0; idx < controller_list.size(); idx++) {

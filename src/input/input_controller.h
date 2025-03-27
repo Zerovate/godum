@@ -14,7 +14,7 @@ public:
 	Ref<InputDevice> get_device() const { return m_device; }
 	void set_device(const Ref<InputDevice> &p_device);
 
-	StringName get_built_in_action(const StringName &p_action) const { return m_built_in_action_map.has(p_action) ? m_built_in_action_map[p_action] : ""; }
+	_FORCE_INLINE_ StringName get_built_in_action(const StringName &p_action) const;
 
 private:
 	Ref<InputDevice> m_device;
