@@ -2,6 +2,8 @@ import os
 
 env = SConscript("E:/Project/Perforce/3rdparty/godot-cpp/Sconstruct")
 
+VariantDir('build', 'src', duplicate=0)
+
 # For reference:
 # - CCFLAGS are compilation flags shared between C and C++
 # - CFLAGS are for C-specific compilation flags
@@ -15,10 +17,10 @@ env.Append(CPPDEFINES=["GODUM_GDEXTENSION"])
 env.Append(CPPPATH=["src"])
 
 def getSubdirs(path:str):
-    result = [path]
+    result = ["build"]
     for root, folders, _ in os.walk(path):
         for folder in folders:
-            result.append(os.path.join(root, folder))
+            result.append(os.path.join("build", folder))
     return result
 
 sources = Glob("*.cpp")
