@@ -18,7 +18,7 @@ public:
 	Player();
 	~Player();
 
-	TypedArray<PlayerComponent> get_controllers(const StringName &name) const;
+	TypedArray<PlayerComponent> get_player_components(const StringName &name) const;
 	_FORCE_INLINE_ bool try_add_player_component(Node *node);
 	_FORCE_INLINE_ bool try_erase_player_controller(Node *node);
 

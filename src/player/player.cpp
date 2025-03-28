@@ -11,7 +11,7 @@ Player::~Player() {
 	disconnect("child_exiting_tree", Callable(this, "try_erase_player_controller"));
 }
 
-TypedArray<PlayerComponent> Player::get_controllers(const StringName &name) const {
+TypedArray<PlayerComponent> Player::get_player_components(const StringName &name) const {
 	TypedArray<PlayerComponent> res;
 	for (auto idx = 0; idx < m_player_components.size(); idx++) {
 		PlayerComponent *ctrl = m_player_components[idx];
@@ -44,7 +44,7 @@ bool Player::try_erase_player_controller(Node *node) {
 }
 
 void Player::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("get_controllers", "name"), &Player::get_controllers);
+	ClassDB::bind_method(D_METHOD("get_player_components", "name"), &Player::get_player_components);
 	ClassDB::bind_method(D_METHOD("try_add_player_component", "child"), &Player::try_add_player_component);
 	ClassDB::bind_method(D_METHOD("try_erase_player_controller", "child"), &Player::try_erase_player_controller);
 }
