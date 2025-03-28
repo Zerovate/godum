@@ -10,7 +10,8 @@
 #endif // GODUM_GDEXTENSION
 
 InputPlayerComponent::InputPlayerComponent() {
-	m_allowed_parent_type = { "LocalPlayer", "PlayerComponent" };
+	// input player component only support for local players.
+	m_parent_types_allowed = { "LocalPlayer", "PlayerComponent" };
 }
 
 StringName InputPlayerComponent::get_built_in_action(const StringName &p_action) const {

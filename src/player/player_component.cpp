@@ -4,6 +4,8 @@
 #include <godot_cpp/classes/engine.hpp>
 
 PlayerComponent::PlayerComponent() {
+	// only Player or PlayerComponent (for node tidy) can be parent.
+	m_parent_types_allowed = { "Player", "PlayerComponent" };
 	connect("child_entered_tree", Callable(this, "_on_child_entered_tree"));
 	connect("child_exiting_tree", Callable(this, "_on_child_exiting_tree"));
 }
@@ -28,35 +30,17 @@ Player *PlayerComponent::get_player() const {
 }
 
 void PlayerComponent::_notification(int p_notification) {
+	Component::_notification(p_notification);
 	switch (p_notification) {
 		case Node::NOTIFICATION_PARENTED: {
 			Node *parent = get_parent();
-			if (!_is_parent_type_valid(parent)) {
-				if (Engine::get_singleton()->is_editor_hint()) {
-					parent->call_deferred("remove_child", this);
-				} else {
-					queue_free();
-				}
-			} else {
-				if (parent->is_class("Player")) {
-					m_player = Object::cast_to<Player>(parent);
-				} else {
-					m_player = Object::cast_to<Player>(parent->call("get_player"));
-				}
-				ERR_FAIL_COND_MSG(!m_player, "Player not found");
+			if (parent->is_class("Player")) {
+				m_player = Object::cast_to<Player>(parent);
+			} else if (parent->is_class("PlayerComponent")) {
+				m_player = Object::cast_to<Player>(parent->call("get_player"));
 			}
 		} break;
 	}
-}
-
-bool PlayerComponent::_is_parent_type_valid(Node *p_parent) const {
-	for (auto type : m_allowed_parent_type) {
-		if (p_parent->is_class(type)) {
-			return true;
-		}
-	}
-	ERR_FAIL_V_MSG(false, "Invalid parent type");
-	return false;
 }
 
 void PlayerComponent::_bind_methods() {

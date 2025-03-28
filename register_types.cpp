@@ -1,5 +1,6 @@
 #include "register_types.h"
 
+#include "engine/component.h"
 #include "godum.h"
 #include "input/enhanced_input_map.h"
 #include "input/input_device.h"
@@ -13,6 +14,7 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 		return;
 	}
 	GDREGISTER_CLASS(Godum);
+	GDREGISTER_ABSTRACT_CLASS(Component);
 	GDREGISTER_CLASS(PlayerComponent);
 	GDREGISTER_CLASS(EnhancedInputMap);
 	GDREGISTER_CLASS(InputPlayerComponent);
