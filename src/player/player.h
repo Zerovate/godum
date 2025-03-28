@@ -9,7 +9,7 @@
 using namespace godot;
 #endif // GODUM_GDEXTENSION;
 
-class Controller;
+class PlayerComponent;
 
 class Player : public Node {
 	GDCLASS(Player, Node);
@@ -18,13 +18,12 @@ public:
 	Player();
 	~Player();
 
-	TypedArray<Controller> get_controllers(const StringName &name) const;
+	TypedArray<PlayerComponent> get_controllers(const StringName &name) const;
+	_FORCE_INLINE_ bool try_add_controller(Node *node);
+	_FORCE_INLINE_ bool try_erase_controller(Node *node);
 
 private:
-	Vector<Controller *> controller_list;
-
-	void _on_child_entered_tree(Node *node);
-	void _on_child_exiting_tree(Node *node);
+	Vector<PlayerComponent *> controller_list;
 
 protected:
 	static void _bind_methods();
