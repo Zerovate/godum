@@ -19,11 +19,11 @@ public:
 	~Player();
 
 	TypedArray<PlayerComponent> get_controllers(const StringName &name) const;
-	_FORCE_INLINE_ bool try_add_controller(Node *node);
-	_FORCE_INLINE_ bool try_erase_controller(Node *node);
+	_FORCE_INLINE_ bool try_add_player_component(Node *node);
+	_FORCE_INLINE_ bool try_erase_player_controller(Node *node);
 
 private:
-	Vector<PlayerComponent *> controller_list;
+	Vector<PlayerComponent *> m_player_components;
 
 protected:
 	static void _bind_methods();

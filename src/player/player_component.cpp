@@ -15,12 +15,12 @@ PlayerComponent::~PlayerComponent() {
 
 void PlayerComponent::_on_child_entered_tree(Node *p_child) {
 	ERR_FAIL_COND_MSG(!m_player, "Player not found");
-	m_player->try_add_controller(p_child);
+	m_player->try_add_player_component(p_child);
 }
 
 void PlayerComponent::_on_child_exiting_tree(Node *p_child) {
 	ERR_FAIL_COND_MSG(!m_player, "Player not found");
-	m_player->try_erase_controller(p_child);
+	m_player->try_erase_player_controller(p_child);
 }
 
 Player *PlayerComponent::get_player() const {
