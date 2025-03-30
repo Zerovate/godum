@@ -6,10 +6,8 @@ reloadable = true
 
 [libraries]
 
-macos.debug.x86_64 = "bin/godum.macos.editor.x86_64.dylib"
-macos.release.x86_64 = "bin/godum.macos.template_release.x86_64.dylib"
-macos.debug.arm64 = "bin/godum.macos.editor.arm64.dylib"
-macos.release.arm64 = "bin/godum.macos.template_release.arm64.dylib"
+macos.debug = "bin/libgodum.macos.editor.dev.universal.dylib"
+macos.release = "bin/libgodum.macos.template_release.universal.dylib"
 windows.debug.x86_32 = "bin/godum.windows.editor.dev.x86_32.dll"
 windows.release.x86_32 = "bin/godum.windows.template_release.x86_32.dll"
 windows.debug.x86_64 = "bin/godum.windows.editor.dev.x86_64.dll"

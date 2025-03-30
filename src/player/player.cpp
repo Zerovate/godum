@@ -13,21 +13,22 @@ Player::~Player() {
 
 TypedArray<PlayerComponent> Player::get_player_components(const StringName &name) const {
 	TypedArray<PlayerComponent> res;
-	for (auto idx = 0; idx < m_player_components.size(); idx++) {
-		PlayerComponent *ctrl = m_player_components[idx];
-		ERR_CONTINUE(!ctrl);
-		if (ctrl->is_class(name)) {
-			res.append(ctrl);
-		}
+	for (auto pc : m_player_components_map[name]) {
+		res.append(pc);
 	}
 	return res;
 }
 
 bool Player::try_add_player_component(Node *node) {
 	ERR_FAIL_COND_V(!node, false);
-	PlayerComponent *ctrl = Object::cast_to<PlayerComponent>(node);
-	if (ctrl) {
-		m_player_components.push_back(ctrl);
+	PlayerComponent *pc = Object::cast_to<PlayerComponent>(node);
+	if (pc) {
+		StringName class_name = pc->get_class();
+		while (class_name != StringName("PlayerComponent")) {
+			m_player_components_map[class_name].insert(pc);
+			class_name = ClassDB::get_parent_class(class_name);
+			ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
+		}
 		return true;
 	}
 	return false;
@@ -35,9 +36,14 @@ bool Player::try_add_player_component(Node *node) {
 
 bool Player::try_erase_player_controller(Node *node) {
 	ERR_FAIL_COND_V(!node, false);
-	PlayerComponent *ctrl = Object::cast_to<PlayerComponent>(node);
-	if (ctrl) {
-		m_player_components.erase(ctrl);
+	PlayerComponent *pc = Object::cast_to<PlayerComponent>(node);
+	if (pc) {
+		StringName class_name = pc->get_class();
+		while (class_name != StringName("PlayerComponent")) {
+			m_player_components_map[class_name].erase(pc);
+			class_name = ClassDB::get_parent_class(class_name);
+			ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
+		}
 		return true;
 	}
 	return false;

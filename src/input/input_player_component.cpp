@@ -14,6 +14,15 @@ InputPlayerComponent::InputPlayerComponent() {
 	m_parent_types_allowed = { "LocalPlayer", "PlayerComponent" };
 }
 
+void InputPlayerComponent::_ready() {
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+	if (m_device.is_null()) {
+		_setup_device_actions();
+	}
+}
+
 StringName InputPlayerComponent::get_built_in_action(const StringName &p_action) const {
 	return m_built_in_action_map.has(p_action) ? m_built_in_action_map[p_action] : "";
 }
@@ -45,7 +54,7 @@ void InputPlayerComponent::_setup_device_actions() {
 	TypedArray<StringName> actions = input_map->get_actions();
 	for (int i = 0; i < actions.size(); i++) {
 		StringName action = actions[i];
-		if (action.begins_with("ui_")) {
+		if (action.begins_with("ui_") || action.ends_with("_keyboard") || action.ends_with("_joypad")) {
 			continue;
 		}
 		TypedArray<InputEvent> events = input_map->action_get_events(action);
@@ -59,8 +68,8 @@ void InputPlayerComponent::_setup_device_actions() {
 			for (int j = 0; j < filtered_events.size(); j++) {
 				input_map->action_add_event(action_ext, filtered_events[j]);
 			}
-			print_verbose("InputMap add action: ", action_ext);
 		}
+		print_line("InputMap add action: ", action, "-> ", action_ext);
 		m_built_in_action_map[action] = action_ext;
 	}
 }
@@ -69,9 +78,11 @@ StringName InputPlayerComponent::_action_with_ext(const StringName &p_action) co
 	if (m_device.is_valid()) {
 		switch (m_device->get_type()) {
 			case InputDevice::DeviceType::DEVICETYPE_KEYBOARD:
-				return String(p_action) + "_k";
+				return String(p_action) + "_keyboard";
 			case InputDevice::DeviceType::DEVICETYPE_JOYPAD:
-				return String(p_action) + "_j_" + itos(m_device->get_id());
+				return String(p_action) + "_" + itos(m_device->get_id()) + "_joypad";
+			default:
+				break;
 		}
 	}
 	return p_action;
@@ -97,6 +108,8 @@ TypedArray<InputEvent> InputPlayerComponent::_filter_events_by_device(const Type
 						filtered_events.push_back(event);
 					}
 				}
+				break;
+			default:
 				break;
 		}
 	}
