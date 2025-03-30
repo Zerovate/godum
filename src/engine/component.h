@@ -12,14 +12,16 @@ class Component : public Node {
 	GDCLASS(Component, Node);
 
 protected:
-	Vector<StringName> m_parent_types_allowed = {};
-	Vector<StringName> m_parent_types_not_allowed = {};
+	virtual void on_owner_changed() {}
 
 	void _notification(int p_what);
 
+	Vector<StringName> m_allowed_owner_types = {};
+	Vector<StringName> m_disallowed_owner_types = {};
+
 private:
-	bool _is_parent_type_valid(Node *p_parent) const;
+	void _on_owner_changed();
 
 protected:
-	static void _bind_methods() {}
+	static void _bind_methods();
 };

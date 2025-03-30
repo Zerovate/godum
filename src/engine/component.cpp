@@ -1,20 +1,18 @@
 #include "component.h"
 
-#include <godot_cpp/classes/engine.hpp>
-
-bool Component::_is_parent_type_valid(Node *p_parent) const {
+bool _is_owner_type_valid(Node *owner, const Vector<StringName> &allowed, const Vector<StringName> &disallowed) {
 	bool is_valid = false;
-	if (!m_parent_types_allowed.is_empty()) {
-		for (auto type : m_parent_types_allowed) {
-			if (p_parent->is_class(type)) {
+	if (!allowed.is_empty()) {
+		for (auto type : allowed) {
+			if (owner->is_class(type)) {
 				return true;
 			}
 		}
 	} else {
 		is_valid = true;
 	}
-	for (auto type : m_parent_types_not_allowed) {
-		if (p_parent->is_class(type)) {
+	for (auto type : disallowed) {
+		if (owner->is_class(type)) {
 			ERR_FAIL_V_MSG(false, "Invalid parent type");
 		}
 	}
@@ -23,14 +21,24 @@ bool Component::_is_parent_type_valid(Node *p_parent) const {
 
 void Component::_notification(int p_what) {
 	switch (p_what) {
-		case Node::NOTIFICATION_PARENTED:
-			Node *parent = get_parent();
-			if (!_is_parent_type_valid(parent)) {
-				if (Engine::get_singleton()->is_editor_hint()) {
-					parent->call_deferred("remove_child", this);
-				} else {
-					queue_free();
-				}
-			}
+		case Node::NOTIFICATION_READY: {
+			connect("owner_changed", Callable(this, "_on_owner_changed"));
+		} break;
+		case Node::NOTIFICATION_EXIT_TREE: {
+			disconnect("owner_changed", Callable(this, "_on_owner_changed"));
+		} break;
+		default:
+			break;
 	}
+}
+
+void Component::_on_owner_changed() {
+	if (!_is_owner_type_valid(get_owner(), m_allowed_owner_types, m_disallowed_owner_types)) {
+		ERR_PRINT("Invalid owner type");
+	}
+	on_owner_changed();
+}
+
+void Component::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("_on_owner_changed"), &Component::_on_owner_changed);
 }
