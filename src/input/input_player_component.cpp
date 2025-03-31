@@ -11,7 +11,7 @@
 
 InputPlayerComponent::InputPlayerComponent() {
 	// input player component only support for local players.
-	m_allowed_owner_types = { "LocalPlayer" };
+	m_allowed_actor_types = { "LocalPlayer" };
 }
 
 void InputPlayerComponent::_ready() {

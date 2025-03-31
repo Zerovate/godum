@@ -1,48 +1,51 @@
 #include "component.h"
 
-bool _is_owner_type_valid(Node *owner, const Vector<StringName> &allowed, const Vector<StringName> &disallowed) {
+bool Component::_is_actor_type_valid(Node *p_actor) {
+	// actor must be valid
+	if (!p_actor) {
+		return false;
+	}
+
 	bool is_valid = false;
-	print_line("owner type: ", owner->get_class(), ", ", owner->get_name());
-	if (!allowed.is_empty()) {
-		for (auto type : allowed) {
-			print_line("allowed type: ", type);
-			if (owner->is_class(type)) {
+	// check if actor type is allowed
+	if (!m_allowed_actor_types.is_empty()) {
+		for (auto type : m_allowed_actor_types) {
+			if (p_actor->is_class(type)) {
 				return true;
 			}
 		}
 	} else {
 		is_valid = true;
 	}
-	for (auto type : disallowed) {
-		if (owner->is_class(type)) {
-			ERR_FAIL_V_MSG(false, "Invalid parent type");
+
+	// check if actor type is disallowed
+	for (auto type : m_disallowed_actor_types) {
+		if (p_actor->is_class(type)) {
+			return false;
 		}
 	}
 	return is_valid;
 }
 
-void Component::_notification(int p_what) {
-	switch (p_what) {
-		case Node::NOTIFICATION_READY: {
-			print_line("Component ready: owner_changed signal connected");
-			connect("owner_changed", Callable(this, "_on_owner_changed"));
-		} break;
-		case Node::NOTIFICATION_EXIT_TREE: {
-			disconnect("owner_changed", Callable(this, "_on_owner_changed"));
-		} break;
-		default:
-			break;
+void Component::set_actor(Node *p_actor) {
+	if (!_is_actor_type_valid(p_actor)) {
+		WARN_PRINT("Invalid actor type");
+		return;
+	}
+	if (m_actor != p_actor) {
+		m_actor = p_actor;
+		emit_signal("actor_changed");
 	}
 }
 
-void Component::_on_owner_changed() {
-	if (!_is_owner_type_valid(get_owner(), m_allowed_owner_types, m_disallowed_owner_types)) {
-		print_line("invalid owner type");
-		ERR_PRINT("Invalid owner type");
-	}
-	on_owner_changed();
+Node *Component::get_actor() {
+	return m_actor;
 }
 
 void Component::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("_on_owner_changed"), &Component::_on_owner_changed);
+	ClassDB::bind_method(D_METHOD("set_actor", "actor"), &Component::set_actor);
+	ClassDB::bind_method(D_METHOD("get_actor"), &Component::get_actor);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "actor", PROPERTY_HINT_RESOURCE_TYPE, "Node", PROPERTY_USAGE_NONE), "set_actor", "get_actor");
+
+	ADD_SIGNAL(MethodInfo("actor_changed"));
 }

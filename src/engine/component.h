@@ -12,15 +12,15 @@ class Component : public Node {
 	GDCLASS(Component, Node);
 
 protected:
-	virtual void on_owner_changed() {}
+	void set_actor(Node *p_actor);
+	Node *get_actor();
+	Node *m_actor;
 
-	void _notification(int p_what);
-
-	Vector<StringName> m_allowed_owner_types = {};
-	Vector<StringName> m_disallowed_owner_types = {};
+	Vector<StringName> m_allowed_actor_types = {};
+	Vector<StringName> m_disallowed_actor_types = {};
 
 private:
-	void _on_owner_changed();
+	bool _is_actor_type_valid(Node *p_actor);
 
 protected:
 	static void _bind_methods();
