@@ -32,6 +32,7 @@ bool Player::try_add_player_component(Node *node) {
 			class_name = ClassDB::get_parent_class(class_name);
 			ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 		}
+		print_line("Player ", get_name(), " added player component ", pc->get_name());
 		return true;
 	}
 	return false;
@@ -47,6 +48,7 @@ bool Player::try_erase_player_controller(Node *node) {
 			class_name = ClassDB::get_parent_class(class_name);
 			ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 		}
+		print_line("Player ", get_name(), " erased player component ", pc->get_name());
 		return true;
 	}
 	return false;

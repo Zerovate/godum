@@ -46,7 +46,7 @@ void PlayerComponent::on_actor_changed() {
 void PlayerComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_player"), &PlayerComponent::get_player);
 	ClassDB::bind_method(D_METHOD("set_player", "player"), &PlayerComponent::set_player);
-	ClassDB::add_property("player", PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_RESOURCE_TYPE, "Player", PROPERTY_USAGE_NONE), "set_player", "get_player");
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_RESOURCE_TYPE, "Player", PROPERTY_USAGE_NONE), "set_player", "get_player");
 
 	ADD_SIGNAL(MethodInfo("player_changed", PropertyInfo(Variant::OBJECT, "player", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Node")));
 }
