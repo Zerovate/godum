@@ -12,7 +12,7 @@ class Component : public Node {
 	GDCLASS(Component, Node);
 
 public:
-	void _ready();
+	void _enter_tree();
 
 protected:
 	void set_actor(Node *p_actor);

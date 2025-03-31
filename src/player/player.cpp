@@ -29,7 +29,6 @@ bool Player::try_add_player_component(Node *node) {
 			ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 		}
 		print_line("Player ", get_name(), " added player component ", pc->get_name());
-		pc->connect("player_changed", Callable(this, "try_erase_player_controller").bind(pc));
 		return true;
 	}
 	return false;

@@ -12,6 +12,8 @@ PlayerComponent::~PlayerComponent() {
 void PlayerComponent::_enter_tree() {
 	print_line("bind actor_changed");
 	connect("actor_changed", Callable(this, "on_actor_changed"));
+
+	Component::_enter_tree();
 }
 
 void PlayerComponent::_exit_tree() {
@@ -25,10 +27,12 @@ void PlayerComponent::_exit_tree() {
 }
 
 void PlayerComponent::on_actor_changed() {
-	print_line("on_actor_changed");
+	emit_signal("player_changed");
+
 	Player *player = get_player();
-	player->try_add_player_component(this);
-	emit_signal("player_changed", player);
+	if (player && player->try_add_player_component(this)) {
+		connect("player_changed", Callable(player, "try_erase_player_controller").bind(this));
+	}
 }
 
 void PlayerComponent::_bind_methods() {

@@ -2,7 +2,7 @@
 
 #include <godot_cpp/classes/engine.hpp>
 
-void Component::_ready() {
+void Component::_enter_tree() {
 	Node *actor = _try_find_actor();
 	print_line("Component::_ready");
 	if (!Engine::get_singleton()->is_editor_hint()) {
@@ -14,6 +14,8 @@ void Component::_ready() {
 void Component::set_actor(Node *p_actor) {
 	if (!_is_actor_type_valid(p_actor)) {
 		WARN_PRINT("Invalid actor type");
+		m_actor = nullptr;
+		emit_signal("actor_changed");
 		return;
 	}
 	if (m_actor != p_actor) {
