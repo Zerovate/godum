@@ -4,23 +4,19 @@
 
 void Component::_enter_tree() {
 	Node *actor = _try_find_actor();
-	print_line("Component::_ready");
 	if (!Engine::get_singleton()->is_editor_hint()) {
 		ERR_FAIL_COND_MSG(!actor, "Actor not found");
 	}
 	set_actor(actor);
 }
 
+void Component::_exit_tree() {
+	set_actor(nullptr);
+}
+
 void Component::set_actor(Node *p_actor) {
-	if (!_is_actor_type_valid(p_actor)) {
-		WARN_PRINT("Invalid actor type");
-		m_actor = nullptr;
-		emit_signal("actor_changed");
-		return;
-	}
 	if (m_actor != p_actor) {
 		m_actor = p_actor;
-		print_line("emit actor_changed!");
 		emit_signal("actor_changed");
 	}
 }

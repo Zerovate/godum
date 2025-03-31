@@ -63,13 +63,13 @@ void InputPlayerComponent::_setup_device_actions() {
 			continue;
 		}
 		auto action_ext = _action_with_ext(action);
-		if (action_ext != action) {
+		if (action_ext != action && !input_map->has_action(action_ext)) {
 			input_map->add_action(action_ext);
 			for (int j = 0; j < filtered_events.size(); j++) {
 				input_map->action_add_event(action_ext, filtered_events[j]);
 			}
+			print_line("InputMap add action: ", action, "-> ", action_ext);
 		}
-		print_line("InputMap add action: ", action, "-> ", action_ext);
 		m_built_in_action_map[action] = action_ext;
 	}
 }

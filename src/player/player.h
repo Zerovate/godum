@@ -21,8 +21,8 @@ public:
 	~Player();
 
 	TypedArray<PlayerComponent> get_player_components(const StringName &name) const;
-	bool try_add_player_component(Node *node);
-	bool try_erase_player_controller(Node *node);
+	bool try_bind_player_component(Node *node);
+	bool try_unbind_player_controller(Node *node);
 
 private:
 	HashMap<StringName, HashSet<PlayerComponent *>> m_player_components_map;

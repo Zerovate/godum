@@ -13,6 +13,7 @@ class Component : public Node {
 
 public:
 	void _enter_tree();
+	void _exit_tree();
 
 protected:
 	void set_actor(Node *p_actor);
