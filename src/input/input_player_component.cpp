@@ -15,6 +15,8 @@ InputPlayerComponent::InputPlayerComponent() {
 }
 
 void InputPlayerComponent::_ready() {
+	PlayerComponent::_ready();
+	print_line("input player component");
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}

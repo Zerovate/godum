@@ -1,8 +1,51 @@
 #include "component.h"
 
+#include <godot_cpp/classes/engine.hpp>
+
+void Component::_ready() {
+	Node *actor = _try_find_actor();
+	print_line("Component::_ready");
+	if (!Engine::get_singleton()->is_editor_hint()) {
+		ERR_FAIL_COND_MSG(!actor, "Actor not found");
+	}
+	set_actor(actor);
+}
+
+void Component::set_actor(Node *p_actor) {
+	if (!_is_actor_type_valid(p_actor)) {
+		WARN_PRINT("Invalid actor type");
+		return;
+	}
+	if (m_actor != p_actor) {
+		m_actor = p_actor;
+		print_line("emit actor_changed!");
+		emit_signal("actor_changed");
+	}
+}
+
+Node *Component::_try_find_actor() {
+	Node *parent_node = this->get_parent();
+	while (parent_node) {
+		if (_is_actor_type_valid(parent_node)) {
+			return parent_node;
+		}
+		parent_node = parent_node->get_parent();
+	}
+	return nullptr;
+}
+
+Node *Component::get_actor() {
+	return m_actor;
+}
+
 bool Component::_is_actor_type_valid(Node *p_actor) {
 	// actor must be valid
 	if (!p_actor) {
+		return false;
+	}
+
+	// actor can not be component
+	if (p_actor->is_class("Component")) {
 		return false;
 	}
 
@@ -25,21 +68,6 @@ bool Component::_is_actor_type_valid(Node *p_actor) {
 		}
 	}
 	return is_valid;
-}
-
-void Component::set_actor(Node *p_actor) {
-	if (!_is_actor_type_valid(p_actor)) {
-		WARN_PRINT("Invalid actor type");
-		return;
-	}
-	if (m_actor != p_actor) {
-		m_actor = p_actor;
-		emit_signal("actor_changed");
-	}
-}
-
-Node *Component::get_actor() {
-	return m_actor;
 }
 
 void Component::_bind_methods() {

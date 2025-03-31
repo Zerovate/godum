@@ -11,16 +11,20 @@ using namespace godot;
 class Component : public Node {
 	GDCLASS(Component, Node);
 
+public:
+	void _ready();
+
 protected:
 	void set_actor(Node *p_actor);
 	Node *get_actor();
-	Node *m_actor;
+	Node *m_actor = nullptr;
 
 	Vector<StringName> m_allowed_actor_types = {};
 	Vector<StringName> m_disallowed_actor_types = {};
 
 private:
 	bool _is_actor_type_valid(Node *p_actor);
+	Node *_try_find_actor();
 
 protected:
 	static void _bind_methods();

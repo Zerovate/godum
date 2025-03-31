@@ -11,7 +11,7 @@ class InputPlayerComponent : public PlayerComponent {
 public:
 	InputPlayerComponent();
 
-	void _ready() override;
+	void _ready();
 
 	Ref<InputDevice> get_device() const { return m_device; }
 	void set_device(const Ref<InputDevice> &p_device);
