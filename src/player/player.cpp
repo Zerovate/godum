@@ -25,6 +25,9 @@ bool Player::try_add_player_component(Node *node) {
 	if (pc) {
 		StringName class_name = pc->get_class();
 		while (class_name != StringName("PlayerComponent")) {
+			if (!m_player_components_map.has(class_name)) {
+				m_player_components_map.insert(class_name, {});
+			}
 			m_player_components_map[class_name].insert(pc);
 			class_name = ClassDB::get_parent_class(class_name);
 			ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");

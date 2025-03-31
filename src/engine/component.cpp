@@ -2,8 +2,10 @@
 
 bool _is_owner_type_valid(Node *owner, const Vector<StringName> &allowed, const Vector<StringName> &disallowed) {
 	bool is_valid = false;
+	print_line("owner type: ", owner->get_class(), ", ", owner->get_name());
 	if (!allowed.is_empty()) {
 		for (auto type : allowed) {
+			print_line("allowed type: ", type);
 			if (owner->is_class(type)) {
 				return true;
 			}
@@ -22,6 +24,7 @@ bool _is_owner_type_valid(Node *owner, const Vector<StringName> &allowed, const 
 void Component::_notification(int p_what) {
 	switch (p_what) {
 		case Node::NOTIFICATION_READY: {
+			print_line("Component ready: owner_changed signal connected");
 			connect("owner_changed", Callable(this, "_on_owner_changed"));
 		} break;
 		case Node::NOTIFICATION_EXIT_TREE: {
@@ -34,6 +37,7 @@ void Component::_notification(int p_what) {
 
 void Component::_on_owner_changed() {
 	if (!_is_owner_type_valid(get_owner(), m_allowed_owner_types, m_disallowed_owner_types)) {
+		print_line("invalid owner type");
 		ERR_PRINT("Invalid owner type");
 	}
 	on_owner_changed();

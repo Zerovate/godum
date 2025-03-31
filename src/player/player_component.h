@@ -13,9 +13,11 @@ public:
 	_FORCE_INLINE_ void set_player(Player *p_player) { set_owner(p_player); }
 
 protected:
-	void _on_child_entered_tree(Node *node);
-	void _on_child_exiting_tree(Node *node);
+	void _notification(int p_what);
 	virtual void on_owner_changed() override;
+
+	// void _on_child_entered_tree(Node *node);
+	// void _on_child_exiting_tree(Node *node);
 
 	Player *m_player;
 
