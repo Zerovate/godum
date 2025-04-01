@@ -11,17 +11,6 @@ PlayerComponent::~PlayerComponent() {
 	disconnect("actor_changed", Callable(this, "on_actor_changed"));
 }
 
-// void PlayerComponent::_enter_tree() {
-// 	Component::_enter_tree();
-// }
-
-// void PlayerComponent::_exit_tree() {
-// 	Player *player = get_player();
-// 	if (player) {
-// 		player->try_unbind_player_controller(this);
-// 	}
-// }
-
 void PlayerComponent::on_actor_changed() {
 	emit_signal("player_changed");
 

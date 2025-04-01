@@ -6,6 +6,7 @@
 #include "input/input_device.h"
 #include "input/input_player_component.h"
 #include "player/local_player.h"
+#include "player/net_player.h"
 #include "player/player.h"
 #include "player/player_component.h"
 
@@ -17,10 +18,11 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(Component);
 	GDREGISTER_ABSTRACT_CLASS(PlayerComponent);
 	GDREGISTER_CLASS(EnhancedInputMap);
-	GDREGISTER_CLASS(InputPlayerComponent);
 	GDREGISTER_CLASS(InputDevice);
+	GDREGISTER_CLASS(InputPlayerComponent);
 	GDREGISTER_ABSTRACT_CLASS(Player);
 	GDREGISTER_CLASS(LocalPlayer);
+	GDREGISTER_CLASS(NetPlayer);
 }
 
 void uninitialize_godum_module(ModuleInitializationLevel p_level) {
