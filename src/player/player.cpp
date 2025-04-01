@@ -22,7 +22,8 @@ bool Player::try_bind_player_component(PlayerComponent *pc) {
 		class_name = ClassDB::get_parent_class(class_name);
 		ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 	}
-	print_line(get_name(), " add pc: ", pc->get_name());
+	print_line(get_name(), " bind pc: ", pc->get_name());
+	emit_signal("pc_binded", pc);
 	return true;
 }
 
@@ -34,7 +35,8 @@ bool Player::try_unbind_player_controller(PlayerComponent *pc) {
 		class_name = ClassDB::get_parent_class(class_name);
 		ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 	}
-	print_line(get_name(), " erase pc: ", pc->get_name());
+	print_line(get_name(), " unbind pc: ", pc->get_name());
+	emit_signal("pc_unbinded", pc);
 	return true;
 }
 
@@ -54,4 +56,7 @@ void Player::_bind_methods() {
 					PROPERTY_HINT_ENUM, "None,Simulated Proxy,Autonomous Proxy,Authority",
 					PROPERTY_USAGE_NONE),
 			"set_role", "get_role");
+
+	ADD_SIGNAL(MethodInfo("pc_binded", PropertyInfo(Variant::OBJECT, "pc", PROPERTY_HINT_RESOURCE_TYPE, "PlayerComponent")));
+	ADD_SIGNAL(MethodInfo("pc_unbinded", PropertyInfo(Variant::OBJECT, "pc", PROPERTY_HINT_RESOURCE_TYPE, "PlayerComponent")));
 }

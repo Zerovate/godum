@@ -14,6 +14,9 @@ public:
 private:
 	void on_actor_changed();
 
+	// unbind related
+	Player *m_prev_player = nullptr;
+
 protected:
 	static void _bind_methods();
 };

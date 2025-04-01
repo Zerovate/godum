@@ -14,15 +14,14 @@ PlayerComponent::~PlayerComponent() {
 void PlayerComponent::on_actor_changed() {
 	emit_signal("player_changed");
 
-	static Player *prev_player = nullptr;
-	if (prev_player) {
-		prev_player->try_unbind_player_controller(this);
+	if (m_prev_player) {
+		m_prev_player->try_unbind_player_controller(this);
 	}
 	Player *player = get_player();
 	if (player) {
 		player->try_bind_player_component(this);
 	}
-	prev_player = player;
+	m_prev_player = player;
 }
 
 void PlayerComponent::_bind_methods() {
