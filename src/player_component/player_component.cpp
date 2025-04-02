@@ -1,5 +1,6 @@
 #include "player_component.h"
 
+#include "player/player.h"
 #include <godot_cpp/classes/engine.hpp>
 
 PlayerComponent::PlayerComponent() {
@@ -11,17 +12,33 @@ PlayerComponent::~PlayerComponent() {
 	disconnect("actor_changed", Callable(this, "on_actor_changed"));
 }
 
-void PlayerComponent::on_actor_changed() {
+Player *PlayerComponent::get_player() const {
+	return Object::cast_to<Player>(m_actor);
+}
+void PlayerComponent::set_player(Player *p_player) {
+	set_actor(p_player);
+}
+
+void PlayerComponent::on_actor_changed(Node *prev_actor) {
 	emit_signal("player_changed");
 
-	if (m_prev_player) {
-		m_prev_player->try_unbind_player_controller(this);
+	Player *prev_player = Object::cast_to<Player>(prev_actor);
+	if (prev_player) {
+		prev_player->try_unbind_player_controller(this);
 	}
 	Player *player = get_player();
 	if (player) {
 		player->try_bind_player_component(this);
 	}
-	m_prev_player = player;
+	update_configuration_warnings();
+}
+
+PackedStringArray PlayerComponent::_get_configuration_warnings() const {
+	PackedStringArray warnings = Component::_get_configuration_warnings();
+	if (!get_player()) {
+		warnings.append("PlayerComponent is not bind to a Player. Please put PlayerComponent as a child of Player.");
+	}
+	return warnings;
 }
 
 void PlayerComponent::_bind_methods() {

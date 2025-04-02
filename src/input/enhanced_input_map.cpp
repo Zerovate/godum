@@ -1,7 +1,7 @@
 #include "enhanced_input_map.h"
 
 #include "godum.h"
-#include "input/input_player_component.h"
+#include "player_component/input_player_component.h"
 #include "player/player.h"
 
 bool EnhancedInputMap::bind_action(const StringName &p_action, const Callable &p_callback) {

@@ -1,6 +1,7 @@
 #pragma once
-#include "input_device.h"
-#include "player/player_component.h"
+#include "player_component.h"
+
+#include "input/input_device.h"
 
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/templates/hash_map.hpp>

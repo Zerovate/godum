@@ -12,12 +12,14 @@ class Component : public Node {
 	GDCLASS(Component, Node);
 
 public:
+	void set_actor(Node *p_actor);
+	Node *get_actor();
+
+public:
 	void _enter_tree();
 	void _exit_tree();
 
 protected:
-	void set_actor(Node *p_actor);
-	Node *get_actor();
 	Node *m_actor = nullptr;
 
 	Vector<StringName> m_allowed_actor_types = {};

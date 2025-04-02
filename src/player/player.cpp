@@ -1,5 +1,5 @@
 #include "player.h"
-#include "player_component.h"
+#include "player_component/player_component.h"
 
 TypedArray<PlayerComponent> Player::get_player_components(const StringName &name) const {
 	TypedArray<PlayerComponent> res;
@@ -23,7 +23,7 @@ bool Player::try_bind_player_component(PlayerComponent *pc) {
 		ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 	}
 	print_line(get_name(), " bind pc: ", pc->get_name());
-	emit_signal("pc_binded", pc);
+	emit_signal("player_controller_binded", pc);
 	return true;
 }
 
@@ -36,7 +36,7 @@ bool Player::try_unbind_player_controller(PlayerComponent *pc) {
 		ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 	}
 	print_line(get_name(), " unbind pc: ", pc->get_name());
-	emit_signal("pc_unbinded", pc);
+	emit_signal("player_controller_unbinded", pc);
 	return true;
 }
 

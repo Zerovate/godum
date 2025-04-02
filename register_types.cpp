@@ -1,14 +1,14 @@
 #include "register_types.h"
 
-#include "engine/component.h"
 #include "godum.h"
+#include "core/component.h"
+#include "player_component/player_component.h"
+#include "player_component/input_player_component.h"
 #include "input/enhanced_input_map.h"
 #include "input/input_device.h"
-#include "input/input_player_component.h"
 #include "player/local_player.h"
 #include "player/net_player.h"
 #include "player/player.h"
-#include "player/player_component.h"
 
 void initialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
