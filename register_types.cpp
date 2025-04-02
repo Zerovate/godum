@@ -2,6 +2,7 @@
 
 #include "godum.h"
 #include "core/component.h"
+#include "entity_component/entity_component.h"
 #include "player_component/player_component.h"
 #include "player_component/input_player_component.h"
 #include "input/enhanced_input_map.h"
@@ -16,6 +17,7 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	}
 	GDREGISTER_CLASS(Godum);
 	GDREGISTER_CLASS(Component);
+	GDREGISTER_CLASS(EntityComponent);
 	GDREGISTER_ABSTRACT_CLASS(PlayerComponent);
 	GDREGISTER_CLASS(EnhancedInputMap);
 	GDREGISTER_CLASS(InputDevice);

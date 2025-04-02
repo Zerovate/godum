@@ -16,8 +16,9 @@ void Component::_exit_tree() {
 
 void Component::set_actor(Node *p_actor) {
 	if (m_actor != p_actor) {
-		emit_signal("actor_changed", m_actor);
+		Node *prev_actor = m_actor;
 		m_actor = p_actor;
+		emit_signal("actor_changed", prev_actor);
 	}
 }
 
