@@ -31,9 +31,9 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_ABSTRACT_CLASS(PlayerComponent);
 
 #ifdef LIMBOAI_MODULE
-	Engine::get_singleton()->add_singleton(Engine::Singleton("EntityManager", EntityManager::get_singleton()));
+	Engine::get_singleton()->add_singleton(Engine::Singleton("ECM", ECM::get_singleton()));
 #elif GODUM_GDEXTENSION
-	Engine::get_singleton()->register_singleton("EntityManager", EntityManager::get_singleton());
+	Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());
 #endif
 }
 

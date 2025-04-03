@@ -12,7 +12,7 @@ class InputPlayerComponent : public PlayerComponent {
 public:
 	InputPlayerComponent();
 
-	void _ready();
+	void _ready() override;
 
 	Ref<InputDevice> get_device() const { return m_device; }
 	void set_device(const Ref<InputDevice> &p_device);

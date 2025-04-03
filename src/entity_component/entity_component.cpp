@@ -9,8 +9,11 @@ EntityComponent::~EntityComponent() {
 }
 
 void EntityComponent::_on_actor_changed(Node *prev_actor) {
-	// dependency injection into actor
-	// EntityManager::get_singleton()->register_component(m_actor, this);
+	// register component to actor.
+	if (prev_actor){
+		ECM::get_singleton()->unregister_component(prev_actor, this);
+	}
+	ECM::get_singleton()->register_component(m_actor, this);
 }
 
 void EntityComponent::_bind_methods() {

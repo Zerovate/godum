@@ -16,8 +16,8 @@ public:
 	Node *get_actor();
 
 public:
-	void _enter_tree();
-	void _exit_tree();
+	void _enter_tree() override;
+	void _exit_tree() override;
 
 protected:
 	Node *m_actor = nullptr;
