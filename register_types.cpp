@@ -6,7 +6,9 @@
 
 #include "core/component.h"
 #include "entity_component/entity_component.h"
-#include "entity_component/entity_manager.h"
+#include "entity_component/entity_component_manager.h"
+#include "game_instance/game_instance.h"
+#include "game_instance/session_gi_component.h"
 #include "input/enhanced_input_map.h"
 #include "input/input_device.h"
 #include "player/local_player.h"
@@ -22,6 +24,7 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(Godum);
 	GDREGISTER_CLASS(Component);
 	GDREGISTER_CLASS(EntityComponent);
+	GDREGISTER_CLASS(SessionGIComponent);
 	GDREGISTER_CLASS(EnhancedInputMap);
 	GDREGISTER_CLASS(InputDevice);
 	GDREGISTER_CLASS(InputPlayerComponent);
@@ -33,6 +36,7 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 #ifdef LIMBOAI_MODULE
 	Engine::get_singleton()->add_singleton(Engine::Singleton("ECM", ECM::get_singleton()));
 #elif GODUM_GDEXTENSION
+	Engine::get_singleton()->register_singleton("GameInstance", GameInstance::get_singleton());
 	Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());
 #endif
 }

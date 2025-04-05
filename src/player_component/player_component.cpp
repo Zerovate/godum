@@ -24,11 +24,11 @@ void PlayerComponent::on_actor_changed(Node *prev_actor) {
 
 	Player *prev_player = Object::cast_to<Player>(prev_actor);
 	if (prev_player) {
-		prev_player->try_unbind_player_controller(this);
+		prev_player->unregister_component(this);
 	}
 	Player *player = get_player();
 	if (player) {
-		player->try_bind_player_component(this);
+		player->register_component(this);
 	}
 	update_configuration_warnings();
 }

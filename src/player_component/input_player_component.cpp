@@ -1,5 +1,7 @@
 #include "input_player_component.h"
 
+#include "player/local_player.h"
+
 #ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/input.hpp>
@@ -18,22 +20,16 @@ void InputPlayerComponent::_ready() {
 	if (Engine::get_singleton()->is_editor_hint()) {
 		return;
 	}
-	if (m_device.is_null()) {
-		_setup_device_actions();
-	}
 }
 
 StringName InputPlayerComponent::get_built_in_action(const StringName &p_action) const {
 	return m_built_in_action_map.has(p_action) ? m_built_in_action_map[p_action] : "";
 }
-void InputPlayerComponent::set_device(const Ref<InputDevice> &p_device) {
-	if (m_device == p_device) {
-		return;
-	}
-	m_device = p_device;
-	if (!Engine::get_singleton()->is_editor_hint()) {
-		_setup_device_actions();
-	}
+
+Ref<InputDevice> InputPlayerComponent::get_device() const {
+	LocalPlayer *player = Object::cast_to<LocalPlayer>(m_actor);
+	ERR_FAIL_COND_V_MSG(player == nullptr, Ref<InputDevice>(), "InputPlayerComponent::get_device: actor is not a LocalPlayer");
+	return player->get_input_device();
 }
 
 void InputPlayerComponent::_setup_device_actions() {
@@ -75,27 +71,27 @@ void InputPlayerComponent::_setup_device_actions() {
 }
 
 StringName InputPlayerComponent::_action_with_ext(const StringName &p_action) const {
-	if (m_device.is_valid()) {
-		switch (m_device->get_type()) {
-			case InputDevice::DeviceType::DEVICETYPE_KEYBOARD:
-				return String(p_action) + "_keyboard";
-			case InputDevice::DeviceType::DEVICETYPE_JOYPAD:
-				return String(p_action) + "_" + itos(m_device->get_id()) + "_joypad";
-			default:
-				break;
-		}
+	Ref<InputDevice> device = get_device();
+	switch (device->get_type()) {
+		case InputDevice::DeviceType::DEVICETYPE_KEYBOARD:
+			return String(p_action) + "_keyboard";
+		case InputDevice::DeviceType::DEVICETYPE_JOYPAD:
+			return String(p_action) + "_" + itos(device->get_id()) + "_joypad";
+		default:
+			break;
 	}
 	return p_action;
 }
 
 TypedArray<InputEvent> InputPlayerComponent::_filter_events_by_device(const TypedArray<InputEvent> &p_events) {
-	if (m_device.is_null() || m_device->get_type() == InputDevice::DEVICETYPE_ALL) {
+	Ref<InputDevice> device = get_device();
+	if (device.is_null() || device->get_type() == InputDevice::DEVICETYPE_ALL) {
 		return p_events;
 	}
 	TypedArray<InputEvent> filtered_events;
 	for (int i = 0; i < p_events.size(); i++) {
 		Ref<InputEvent> event = p_events[i];
-		switch (m_device->get_type()) {
+		switch (device->get_type()) {
 			case InputDevice::DEVICETYPE_KEYBOARD:
 				if (event->is_class("InputEventKey") || event->is_class("InputEventMouse")) {
 					filtered_events.push_back(event);
@@ -103,8 +99,8 @@ TypedArray<InputEvent> InputPlayerComponent::_filter_events_by_device(const Type
 				break;
 			case InputDevice::DEVICETYPE_JOYPAD:
 				if (event->is_class("InputEventJoypadButton") || event->is_class("InputEventJoypadMotion")) {
-					if (event->get_device() == m_device->get_id() || event->get_device() == InputEvent::DEVICE_ID_EMULATION || m_device->get_id() == InputEvent::DEVICE_ID_EMULATION) {
-						event->set_device(m_device->get_id());
+					if (event->get_device() == device->get_id() || event->get_device() == InputEvent::DEVICE_ID_EMULATION || device->get_id() == InputEvent::DEVICE_ID_EMULATION) {
+						event->set_device(device->get_id());
 						filtered_events.push_back(event);
 					}
 				}
@@ -118,8 +114,6 @@ TypedArray<InputEvent> InputPlayerComponent::_filter_events_by_device(const Type
 
 void InputPlayerComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_device"), &InputPlayerComponent::get_device);
-	ClassDB::bind_method(D_METHOD("set_device", "device"), &InputPlayerComponent::set_device);
-	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "device", PROPERTY_HINT_RESOURCE_TYPE, "InputDevice"), "set_device", "get_device");
 
 	ClassDB::bind_method(D_METHOD("get_built_in_action", "action"), &InputPlayerComponent::get_built_in_action);
 }

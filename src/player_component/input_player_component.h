@@ -14,13 +14,10 @@ public:
 
 	void _ready() override;
 
-	Ref<InputDevice> get_device() const { return m_device; }
-	void set_device(const Ref<InputDevice> &p_device);
-
+	Ref<InputDevice> get_device() const;
 	_FORCE_INLINE_ StringName get_built_in_action(const StringName &p_action) const;
 
 private:
-	Ref<InputDevice> m_device;
 	HashMap<StringName, StringName> m_built_in_action_map;
 
 	void _setup_device_actions();

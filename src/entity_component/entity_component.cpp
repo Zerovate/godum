@@ -1,5 +1,5 @@
 #include "entity_component.h"
-#include "entity_manager.h"
+#include "entity_component_manager.h"
 
 EntityComponent::EntityComponent() {
 	connect("actor_changed", Callable(this, "_on_actor_changed"));

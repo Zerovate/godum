@@ -11,7 +11,7 @@ bool EnhancedInputMap::bind_action(const StringName &p_action, const Callable &p
 	if (!player) {
 		return false;
 	}
-	auto controllers = player->get_player_components("InputPlayerComponent");
+	auto controllers = player->get_components("InputPlayerComponent");
 	for (auto idx = 0; idx < controllers.size(); idx++) {
 		InputPlayerComponent *ctrl = Object::cast_to<InputPlayerComponent>(controllers[idx]);
 

@@ -1,4 +1,6 @@
 #pragma once
+#include "core/component_holder.h"
+#include "player_component/player_component.h"
 
 #ifdef GODUM_MODULE
 #include <scene/main/node.h>
@@ -11,15 +13,11 @@
 using namespace godot;
 #endif // GODUM_GDEXTENSION;
 
-class PlayerComponent;
-
-class Player : public Node {
+class Player : public Node, public ComponentHolder<PlayerComponent> {
 	GDCLASS(Player, Node);
 
 public:
-	TypedArray<PlayerComponent> get_player_components(const StringName &name) const;
-	bool try_bind_player_component(PlayerComponent *pc);
-	bool try_unbind_player_controller(PlayerComponent *pc);
+	COMPONENT_HOLDER_IMPLEMENT(PlayerComponent);
 
 	enum Role {
 		ROLE_None,
