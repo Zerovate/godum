@@ -16,6 +16,11 @@
 #include "player/player.h"
 #include "player_component/input_player_component.h"
 #include "player_component/player_component.h"
+#include "world/world_node.h"
+#include "world/world_component.h"
+#include "world/entity_manager_component.h"
+
+static GameInstance* _game_instance = nullptr;
 
 void initialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -32,12 +37,17 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(LocalPlayer);
 	GDREGISTER_CLASS(NetPlayer);
 	GDREGISTER_ABSTRACT_CLASS(PlayerComponent);
+	GDREGISTER_CLASS(WorldNode);
+	GDREGISTER_ABSTRACT_CLASS(WorldComponent);
+	GDREGISTER_VIRTUAL_CLASS(EntityManagerComponent);
 
+	_game_instance = memnew(GameInstance);
+	GDREGISTER_CLASS(GameInstance);
 #ifdef LIMBOAI_MODULE
 	Engine::get_singleton()->add_singleton(Engine::Singleton("ECM", ECM::get_singleton()));
 #elif GODUM_GDEXTENSION
 	Engine::get_singleton()->register_singleton("GameInstance", GameInstance::get_singleton());
-	Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());
+	// Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());
 #endif
 }
 
@@ -45,6 +55,7 @@ void uninitialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	memdelete(_game_instance);
 }
 
 #ifdef GODUM_GDEXTENSION
