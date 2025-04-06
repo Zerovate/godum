@@ -11,7 +11,7 @@ class ComponentHolder {
 
 public:
 	virtual TypedArray<T> get_components(const StringName &name) const;
-	virtual T *get_component(const StringName &name);
+	virtual T *get_component(const StringName &name) const;
 	virtual bool register_component(T *component);
 	virtual bool unregister_component(T *component);
 
@@ -31,7 +31,7 @@ TypedArray<T> ComponentHolder<T>::get_components(const StringName &name) const {
 }
 
 template <typename T>
-T *ComponentHolder<T>::get_component(const StringName &name) {
+T *ComponentHolder<T>::get_component(const StringName &name) const {
 	if (m_components_map.has(name)) {
 		return *(m_components_map[name].begin());
 	}
@@ -70,7 +70,7 @@ public:                                                                         
 	virtual TypedArray<m_class> get_components(const StringName &name) const override { \
 		return ComponentHolder<m_class>::get_components(name);                          \
 	}                                                                                   \
-	virtual m_class *get_component(const StringName &name) override {                   \
+	virtual m_class *get_component(const StringName &name) const override {             \
 		return ComponentHolder<m_class>::get_component(name);                           \
 	}                                                                                   \
 	virtual bool register_component(m_class *component) override {                      \
