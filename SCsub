@@ -5,10 +5,10 @@ Import("env_modules")
 module_env = env.Clone()
 
 module_env.Append(CPPDEFINES=["GODUM_MODULE"])
-module_env.Append(CPPPATH=["src"])
+module_env.Append(CPPPATH=["src", "3rdparty/steamworks_sdk/public"])
 
 def getSubdirs(path:str):
-    result = []
+    result = ["src"]
     for root, folders, _ in os.walk(path):
         for folder in folders:
             result.append(os.path.join(root, folder))
@@ -16,6 +16,6 @@ def getSubdirs(path:str):
 
 # sources = Glob("*.cpp")
 module_env.add_source_files(env.modules_sources, "*.cpp")
-for path in getSubdirs("./"):
+for path in getSubdirs("./src"):
     module_env.add_source_files(env.modules_sources, os.path.join(path, "*.cpp"))
 
