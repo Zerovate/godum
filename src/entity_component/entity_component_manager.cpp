@@ -5,19 +5,6 @@
 ECM *ECM::singleton = nullptr;
 
 ECM *ECM::get_singleton() {
-	if (unlikely(singleton == nullptr)) {
-		GDExtensionObjectPtr singleton_obj = internal::gdextension_interface_global_get_singleton(ECM::get_class_static()._native_ptr());
-#ifdef DEBUG_ENABLED
-		ERR_FAIL_NULL_V(singleton_obj, nullptr);
-#endif // DEBUG_ENABLED
-		singleton = reinterpret_cast<ECM *>(internal::gdextension_interface_object_get_instance_binding(singleton_obj, internal::token, &ECM::_gde_binding_callbacks));
-#ifdef DEBUG_ENABLED
-		ERR_FAIL_NULL_V(singleton, nullptr);
-#endif // DEBUG_ENABLED
-		if (likely(singleton)) {
-			ClassDB::_register_engine_singleton(ECM::get_class_static(), singleton);
-		}
-	}
 	return singleton;
 }
 

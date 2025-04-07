@@ -1,7 +1,13 @@
 #pragma once
-#include <godot_cpp/classes/node.hpp>
 
+#ifdef GODUM_MODULE
+#include <scene/main/node.h>
+#endif
+
+#ifdef GODUM_EXTENSION
+#include <godot_cpp/classes/node.hpp>
 using namespace godot;
+#endif
 
 class Player;
 

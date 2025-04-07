@@ -1,7 +1,14 @@
 #include "player_component.h"
 
 #include "player/player.h"
+
+#ifdef GODUM_MODULE
+#include <core/config/engine.h>
+#endif
+
+#ifdef GODUM_EXTENSION
 #include <godot_cpp/classes/engine.hpp>
+#endif
 
 PlayerComponent::PlayerComponent() {
 	// only Player or PlayerComponent (for node tidy) can be parent.
@@ -34,7 +41,8 @@ void PlayerComponent::on_actor_changed(Node *prev_actor) {
 }
 
 PackedStringArray PlayerComponent::_get_configuration_warnings() const {
-	PackedStringArray warnings = Component::_get_configuration_warnings();
+	// PackedStringArray warnings = Component::_get_configuration_warnings();
+	PackedStringArray warnings;
 	if (!get_player()) {
 		warnings.append("PlayerComponent is not bind to a Player. Please put PlayerComponent as a child of Player.");
 	}

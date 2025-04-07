@@ -3,8 +3,14 @@
 
 #include "world_component.h"
 
-#include <godot_cpp/classes/node2d.hpp>
+#ifdef GODUM_MODULE
+#include <scene/main/node.h>
+#endif
+
+#ifdef GODUM_EXTENSION
+#include <godot_cpp/classes/node.hpp>
 using namespace godot;
+#endif
 
 class WorldNode : public Node, public ComponentHolder<WorldComponent> {
 	GDCLASS(WorldNode, Node)

@@ -1,5 +1,10 @@
 #pragma once
 
+#ifdef GODUM_MODULE
+#include <core/object/object.h>
+#include <core/object/class_db.h>
+#endif
+
 #ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/object.hpp>
 using namespace godot;

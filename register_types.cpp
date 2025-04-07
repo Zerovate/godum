@@ -1,6 +1,12 @@
 #include "register_types.h"
 
+#ifdef GODUM_MODULE
+#include <core/core_bind.h>
+#endif
+
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/engine.hpp>
+#endif
 
 #include "godum.h"
 
@@ -43,8 +49,8 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 
 	_game_instance = memnew(GameInstance);
 	GDREGISTER_CLASS(GameInstance);
-#ifdef LIMBOAI_MODULE
-	Engine::get_singleton()->add_singleton(Engine::Singleton("ECM", ECM::get_singleton()));
+#ifdef GODUM_MODULE
+	Engine::get_singleton()->add_singleton(Engine::Singleton("GameInstance", GameInstance::get_singleton()));
 #elif GODUM_GDEXTENSION
 	Engine::get_singleton()->register_singleton("GameInstance", GameInstance::get_singleton());
 	// Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());

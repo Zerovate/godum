@@ -1,9 +1,15 @@
 #pragma once
 
+#ifdef GODUM_MODULE
+#include <scene/main/node.h>
+#endif
+
+#ifdef GODUM_EXTENSION
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/templates/hash_map.hpp>
 #include <godot_cpp/templates/hash_set.hpp>
 using namespace godot;
+#endif
 
 class EntityComponent;
 

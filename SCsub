@@ -5,6 +5,7 @@ Import("env_modules")
 module_env = env.Clone()
 
 module_env.Append(CPPDEFINES=["GODUM_MODULE"])
+module_env.Append(CPPPATH=["src"])
 
 def getSubdirs(path:str):
     result = []

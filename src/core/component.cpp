@@ -1,6 +1,12 @@
 #include "component.h"
 
+#ifdef GODUM_MODULE
+#include <core/config/engine.h>
+#endif
+
+#ifdef GODUM_EXTENSION
 #include <godot_cpp/classes/engine.hpp>
+#endif
 
 void Component::_enter_tree() {
 	Node *actor = _try_find_actor();

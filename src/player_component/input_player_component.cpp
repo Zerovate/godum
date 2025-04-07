@@ -2,6 +2,10 @@
 
 #include "player/local_player.h"
 
+#ifdef GODUM_MODULE
+#include <core/input/input_map.h>
+#endif
+
 #ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/input.hpp>
@@ -47,13 +51,13 @@ void InputPlayerComponent::_setup_device_actions() {
 	}
 
 	// add new actions.
-	TypedArray<StringName> actions = input_map->get_actions();
+	TypedArray<StringName> actions = input_map->call("get_actions");
 	for (int i = 0; i < actions.size(); i++) {
-		StringName action = actions[i];
+		String action = actions[i];
 		if (action.begins_with("ui_") || action.ends_with("_keyboard") || action.ends_with("_joypad")) {
 			continue;
 		}
-		TypedArray<InputEvent> events = input_map->action_get_events(action);
+		TypedArray<InputEvent> events = input_map->call("action_get_events", action);
 		TypedArray<InputEvent> filtered_events = _filter_events_by_device(events);
 		if (filtered_events.is_empty()) {
 			continue;

@@ -1,8 +1,14 @@
 #pragma once
 #include "gi_component.h"
 
+#ifdef GODUM_MODULE
+#include <core/io/resource.h>
+#endif
+
+#ifdef GODUM_EXTENSION
 #include <godot_cpp/classes/object.hpp>
 using namespace godot;
+#endif
 
 enum SessionOnlineMode {
 	SESSION_ONLINE_MODE_OFFLINE = 0,

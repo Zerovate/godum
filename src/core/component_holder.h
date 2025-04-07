@@ -1,9 +1,18 @@
 #pragma once
 #include "component.h"
+
+#include <type_traits>
+
+#ifdef GODUM_MODULE
+#include <core/templates/hash_map.h>
+#include <core/templates/hash_set.h>
+#endif
+
+#ifdef GODUM_EXTENSION
 #include <godot_cpp/templates/hash_map.hpp>
 #include <godot_cpp/templates/hash_set.hpp>
-#include <type_traits>
 using namespace godot;
+#endif
 
 template <typename T = Component>
 class ComponentHolder {

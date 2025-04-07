@@ -13,7 +13,7 @@ public:
 	Player *get_player() const;
 	void set_player(Player *p_player);
 
-	virtual PackedStringArray _get_configuration_warnings() const override;
+	virtual PackedStringArray _get_configuration_warnings() const;
 
 private:
 	void on_actor_changed(Node* prev_actor);

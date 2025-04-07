@@ -2,12 +2,12 @@
 #include "core/component_holder.h"
 #include "gi_component.h"
 
-#ifdef GODUM_MUDULE
-#include <core/object/ref_counted.h>
+#ifdef GODUM_MODULE
+#include <core/object/object.h>
 #endif
 
 #ifdef GODUM_GDEXTENSION
-#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/object.hpp>
 using namespace godot;
 #endif
 

@@ -1,5 +1,10 @@
 #pragma once
 
+#ifdef GODUM_MODULE
+#include <core/input/input_event.h>
+#include <core/io/resource.h>
+#endif
+
 #ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/resource.hpp>

@@ -3,8 +3,14 @@
 
 #include "input/input_device.h"
 
+#ifdef GODUM_MODULE
+#include <core/input/input_event.h>
+#endif
+
+#ifdef GODUM_EXTENSION
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/templates/hash_map.hpp>
+#endif
 
 class InputPlayerComponent : public PlayerComponent {
 	GDCLASS(InputPlayerComponent, PlayerComponent);
@@ -12,7 +18,7 @@ class InputPlayerComponent : public PlayerComponent {
 public:
 	InputPlayerComponent();
 
-	void _ready() override;
+	void _ready();
 
 	Ref<InputDevice> get_device() const;
 	_FORCE_INLINE_ StringName get_built_in_action(const StringName &p_action) const;

@@ -1,7 +1,13 @@
 #pragma once
 
+#ifdef GODUM_MODULE
+#include <scene/main/multiplayer_peer.h>
+#endif
+
+#ifdef GODUM_EXTENSION
 #include <godot_cpp/classes/multiplayer_peer.hpp>
 using namespace godot;
+#endif
 
 class SteamMultiplayerPeer : public MultiplayerPeer {
 	GDCLASS(SteamMultiplayerPeer, MultiplayerPeer);
