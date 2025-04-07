@@ -8,7 +8,7 @@
 #include <core/templates/hash_set.h>
 #endif
 
-#ifdef GODUM_EXTENSION
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/templates/hash_map.hpp>
 #include <godot_cpp/templates/hash_set.hpp>
 using namespace godot;

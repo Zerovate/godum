@@ -7,6 +7,8 @@ class SteamConnection : public RefCounted {
 	GDCLASS(SteamConnection, RefCounted);
 
 public:
+	Error create_server();
+
 protected:
 	static void _bind_methods();
 };

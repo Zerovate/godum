@@ -6,7 +6,7 @@
 #include <core/config/engine.h>
 #endif
 
-#ifdef GODUM_EXTENSION
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/engine.hpp>
 #endif
 
