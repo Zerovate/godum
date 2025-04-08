@@ -5,8 +5,8 @@
 #include <core/io/resource.h>
 #endif
 
-#ifdef GODUM_EXTENSION
-#include <godot_cpp/classes/object.hpp>
+#ifdef GODUM_GDEXTENSION
+#include <godot_cpp/classes/resource.hpp>
 using namespace godot;
 #endif
 

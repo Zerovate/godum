@@ -7,7 +7,7 @@
 #include <core/input/input_event.h>
 #endif
 
-#ifdef GODUM_EXTENSION
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/templates/hash_map.hpp>
 #endif

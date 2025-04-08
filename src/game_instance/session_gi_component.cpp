@@ -5,7 +5,7 @@
 #include <scene/main/multiplayer_api.h>
 #endif
 
-#ifdef GODUM_EXTENSION
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/e_net_multiplayer_peer.hpp>
 #include <godot_cpp/classes/multiplayer_api.hpp>
 #include <godot_cpp/classes/web_rtc_multiplayer_peer.hpp>

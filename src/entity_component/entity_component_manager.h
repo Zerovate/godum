@@ -4,7 +4,7 @@
 #include <scene/main/node.h>
 #endif
 
-#ifdef GODUM_EXTENSION
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/templates/hash_map.hpp>
 #include <godot_cpp/templates/hash_set.hpp>
