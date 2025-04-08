@@ -1,5 +1,4 @@
 #include "steam_connection.h"
-#include <godot_cpp/variant/utility_functions.hpp>
 
 void SteamConnection::_bind_methods() {
 }

@@ -1,8 +1,13 @@
-#include <godot_cpp/core/class_db.hpp>
-
 #include "steam_multiplayer_peer.h"
 
+#ifdef GODUM_MODULE
+#include <core/object/class_db.h>
+#endif
+
+#ifdef GODUM_GDEXTENSION
+#include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#endif
 
 #define STEAM_BUFFER_SIZE 255
 
@@ -268,8 +273,8 @@ bool SteamMultiplayerPeer::get_identity(SteamNetworkingIdentity *p_identity) {
 }
 
 void SteamMultiplayerPeer::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("create_host", "n_local_virtual_port"), &SteamMultiplayerPeer::create_host, DEFVAL(nullptr));
-	ClassDB::bind_method(D_METHOD("create_client", "identity_remote", "n_local_virtual_port"), &SteamMultiplayerPeer::create_client, DEFVAL(nullptr));
+	ClassDB::bind_method(D_METHOD("create_host", "n_local_virtual_port"), &SteamMultiplayerPeer::create_host);
+	ClassDB::bind_method(D_METHOD("create_client", "identity_remote", "n_local_virtual_port"), &SteamMultiplayerPeer::create_client);
 	ClassDB::bind_method(D_METHOD("set_listen_socket", "listen_socket"), &SteamMultiplayerPeer::set_listen_socket);
 	ClassDB::bind_method(D_METHOD("get_listen_socket"), &SteamMultiplayerPeer::get_listen_socket);
 	ClassDB::bind_method(D_METHOD("get_steam64_from_peer_id", "peer_id"), &SteamMultiplayerPeer::get_steam64_from_peer_id);
@@ -403,8 +408,9 @@ void SteamMultiplayerPeer::network_connection_status_changed(SteamNetConnectionS
 
 // GODOT MULTIPLAYER PEER UTILS  ///////////////////
 Ref<SteamConnection> SteamMultiplayerPeer::get_connection_by_peer(int peer_id) {
-	if (peerId_to_steamId.has(peer_id))
+	if (peerId_to_steamId.has(peer_id)) {
 		return peerId_to_steamId[peer_id];
+	}
 
 	return nullptr;
 }
@@ -456,8 +462,9 @@ uint64_t SteamMultiplayerPeer::get_steam64_from_peer_id(const uint32_t peer_id) 
 		return SteamUser()->GetSteamID().ConvertToUint64();
 	} else if (peerId_to_steamId.has(peer_id)) {
 		return peerId_to_steamId[peer_id]->steam_id;
-	} else
+	} else {
 		return -1;
+	}
 }
 
 uint32_t SteamMultiplayerPeer::get_peer_id_from_steam64(const uint64_t steamid) const {
@@ -465,8 +472,9 @@ uint32_t SteamMultiplayerPeer::get_peer_id_from_steam64(const uint64_t steamid) 
 		return this->unique_id;
 	} else if (connections_by_steamId64.has(steamid)) {
 		return connections_by_steamId64[steamid]->peer_id;
-	} else
+	} else {
 		return -1;
+	}
 }
 
 void SteamMultiplayerPeer::set_steam_id_peer(uint64_t steam_id, int peer_id) {

@@ -2,12 +2,18 @@
 #define STEAM_PACKET_PEER_H
 
 #include "steam/steam_api_flat.h"
+
+#ifdef GODUM_MODULE
+#include <core/object/ref_counted.h>
+#endif
+
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/classes/ref_counted.hpp>
+using namespace godot;
+#endif
 
 #define MAX_STEAM_PACKET_SIZE k_cbMaxSteamNetworkingSocketsMessageSizeSend
-
-using namespace godot;
 
 class SteamPacketPeer : public RefCounted {
 	GDCLASS(SteamPacketPeer, RefCounted)

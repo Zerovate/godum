@@ -1,8 +1,15 @@
 #ifndef STEAM_MULTIPLAYER_PEER_H
 #define STEAM_MULTIPLAYER_PEER_H
 
+#ifdef GODUM_MODULE
+#include <scene/main/multiplayer_peer.h>
+#endif
+
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/multiplayer_peer_extension.hpp>
 #include <godot_cpp/templates/hash_map.hpp>
+using namespace godot;
+#endif
 
 // Include Steamworks API headers
 #include "map"
@@ -10,8 +17,6 @@
 #include "steam/steamnetworkingfakeip.h"
 #include "steam_connection.h"
 #include "steam_peer_config.h"
-
-using namespace godot;
 
 #define MAX_PLAYERS_PER_SERVER 16
 
@@ -146,6 +151,94 @@ public:
 
 	SteamMultiplayerPeer();
 	~SteamMultiplayerPeer();
+#ifdef GODUM_MODULE
+	virtual Error get_packet(const uint8_t **r_buffer, int &r_buffer_size) override {
+		return _get_packet(r_buffer, (int32_t *)&r_buffer_size);
+	}
+	virtual Error put_packet(const uint8_t *p_buffer, int p_buffer_size) override {
+		return _put_packet(p_buffer, p_buffer_size);
+	}
+	int32_t get_available_packet_count() const override {
+		return _get_available_packet_count();
+	}
+	int32_t get_max_packet_size() const override {
+		return _get_max_packet_size();
+	}
+	// PackedByteArray _get_packet_script();
+	// Error _put_packet_script(const PackedByteArray &p_buffer);
+	int32_t get_packet_channel() const override {
+		return _get_packet_channel();
+	}
+	MultiplayerPeer::TransferMode get_packet_mode() const override {
+		return _get_packet_mode();
+	}
+	void set_transfer_channel(int32_t p_channel) override {
+		return _set_transfer_channel(p_channel);
+	}
+	int32_t get_transfer_channel() const override {
+		return _get_transfer_channel();
+	}
+	void set_transfer_mode(MultiplayerPeer::TransferMode p_mode) override {
+		return _set_transfer_mode(p_mode);
+	}
+	MultiplayerPeer::TransferMode get_transfer_mode() const override {
+		return _get_transfer_mode();
+	}
+	void set_target_peer(int32_t p_peer) override {
+		return _set_target_peer(p_peer);
+	}
+	int32_t get_packet_peer() const override {
+		return _get_packet_peer();
+	}
+	bool is_server() const override {
+		return _is_server();
+	}
+	void poll() override {
+		return _poll();
+	}
+	void close() override {
+		return _close();
+	}
+	void disconnect_peer(int32_t p_peer, bool p_force) override {
+		return _disconnect_peer(p_peer, p_force);
+	}
+	int32_t get_unique_id() const override {
+		return _get_unique_id();
+	}
+	// void _set_refuse_new_connections(bool p_enable) override;
+	// bool _is_refusing_new_connections() const override;
+	bool is_server_relay_supported() const override {
+		return _is_server_relay_supported();
+	}
+	MultiplayerPeer::ConnectionStatus get_connection_status() const override {
+		return _get_connection_status();
+	}
+
+	Error _get_packet(const uint8_t **r_buffer, int32_t *r_buffer_size);
+	Error _put_packet(const uint8_t *p_buffer, int32_t p_buffer_size);
+	int32_t _get_available_packet_count() const;
+	int32_t _get_max_packet_size() const;
+	// PackedByteArray _get_packet_script();
+	// Error _put_packet_script(const PackedByteArray &p_buffer);
+	int32_t _get_packet_channel() const;
+	MultiplayerPeer::TransferMode _get_packet_mode() const;
+	void _set_transfer_channel(int32_t p_channel);
+	int32_t _get_transfer_channel() const;
+	void _set_transfer_mode(MultiplayerPeer::TransferMode p_mode);
+	MultiplayerPeer::TransferMode _get_transfer_mode() const;
+	void _set_target_peer(int32_t p_peer);
+	int32_t _get_packet_peer() const;
+	bool _is_server() const;
+	void _poll();
+	void _close();
+	void _disconnect_peer(int32_t p_peer, bool p_force);
+	int32_t _get_unique_id() const;
+	// void _set_refuse_new_connections(bool p_enable) override;
+	// bool _is_refusing_new_connections() const override;
+	bool _is_server_relay_supported() const;
+	MultiplayerPeer::ConnectionStatus _get_connection_status() const;
+#endif
+#ifdef GODUM_GDEXTENSION
 	Error _get_packet(const uint8_t **r_buffer, int32_t *r_buffer_size) override;
 	Error _put_packet(const uint8_t *p_buffer, int32_t p_buffer_size) override;
 	int32_t _get_available_packet_count() const override;
@@ -169,6 +262,7 @@ public:
 	// bool _is_refusing_new_connections() const override;
 	bool _is_server_relay_supported() const override;
 	MultiplayerPeer::ConnectionStatus _get_connection_status() const override;
+#endif
 
 	bool close_listen_socket();
 	Error create_host(int n_local_virtual_port);

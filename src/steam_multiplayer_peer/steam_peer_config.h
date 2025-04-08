@@ -2,10 +2,17 @@
 #define STEAM_PEER_CONFIG
 
 #include "steam/steam_api_flat.h"
+
+#ifdef GODUM_MODULE
+#include <core/object/ref_counted.h>
+#include <core/os/os.h>
+#endif
+
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/classes/ref_counted.hpp>
-
 using namespace godot;
+#endif
 
 class SteamPeerConfig : public RefCounted {
 	GDCLASS(SteamPeerConfig, RefCounted)

@@ -1,9 +1,15 @@
 #ifndef STEAM_CONNECTION_H
 #define STEAM_CONNECTION_H
 
+#ifdef GODUM_MODULE
+#include <scene/main/multiplayer_peer.h>
+#endif
+
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/classes/multiplayer_peer_extension.hpp>
 #include <godot_cpp/classes/ref_counted.hpp>
 #include <godot_cpp/classes/time.hpp>
+#endif
 #include <memory>
 
 #include "steam_packet_peer.h"

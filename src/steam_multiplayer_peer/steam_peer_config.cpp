@@ -1,7 +1,13 @@
 #include "steam_peer_config.h"
+
+#ifdef GODUM_MODULE
+#include <core/object/class_db.h>
+#endif
+
+#ifdef GODUM_GDEXTENSION
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
-
+#endif
 
 Dictionary SteamPeerConfig::get_options() const {
 	return options;
@@ -19,7 +25,7 @@ SteamNetworkingConfigValue_t *SteamPeerConfig::get_convert_options() const {
 		for (int i = 0; i < options_size; i++) {
 			SteamNetworkingConfigValue_t this_option;
 			int sent_option = (int)options.keys()[i];
-			UtilityFunctions::print(sent_option);
+			print_line(sent_option);
 			ESteamNetworkingConfigValue this_value = ESteamNetworkingConfigValue((int)sent_option);
 			Variant::Type type = options[sent_option].get_type();
 			if (type == Variant::INT) {
