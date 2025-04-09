@@ -1,4 +1,11 @@
 import os
+# 在 SConstruct 顶部添加
+AddOption('--support-steam',
+          dest='support_steam',
+          type='string',
+          default='false',
+          help='Enable Steam support (true/false)')
+
 Import("env")
 Import("env_modules")
 
@@ -7,38 +14,46 @@ module_path = Dir('.').srcnode().abspath
 module_env = env.Clone()
 
 module_env.Append(CPPDEFINES=["GODUM_MODULE"])
-module_env.Append(CPPPATH=["src", "3rdparty/steamworks_sdk/public"])
+module_env.Append(CPPPATH=["src"])
 
-# Local dependency paths, adapt them to your setup
-steam_lib_path = "%s/3rdparty/steamworks_sdk/redistributable_bin" % module_path
+support_steam = env.GetOption('support_steam') or 'false'
+support_steam = support_steam.lower() == 'true'
 
-if env['platform'] in ('macos', 'osx'):
-    # Set the correct Steam library
-    steam_lib_path += "/osx"
-    steamworks_library = 'libsteam_api.dylib'
+if support_steam:
+    # Local dependency paths, adapt them to your setup
+    steam_lib_path = "%s/3rdparty/steamworks_sdk/redistributable_bin" % module_path
 
-elif env['platform'] in ('linuxbsd', 'linux'):
-    # Set correct Steam library
-    steam_lib_path += "/linux64" if env['arch'] == 'x86_64' else "/linux32"
-    steamworks_library = 'libsteam_api.so'
+    if env['platform'] in ('macos', 'osx'):
+        # Set the correct Steam library
+        steam_lib_path += "/osx"
+        steamworks_library = 'libsteam_api.dylib'
 
-elif env['platform'] == "windows":
-    steam_lib_path += "/win64" if env['arch'] == 'x86_64' else ""
-    steamworks_library = 'steam_api64.lib' if env['arch'] == 'x86_64' else 'steam_api.lib'
-    # steamworks_library = 'steam_api64.lib' if env['arch'] == 'x86_64' else 'steam_api.lib'
+    elif env['platform'] in ('linuxbsd', 'linux'):
+        # Set correct Steam library
+        steam_lib_path += "/linux64" if env['arch'] == 'x86_64' else "/linux32"
+        steamworks_library = 'libsteam_api.so'
 
-env.Append(LIBPATH=[steam_lib_path])
-# env.Append(LIBS=[
-#     steamworks_library.replace(".dll", "")
-# ])
-env.Append(LINKFLAGS=[
-    steamworks_library
-])
+    elif env['platform'] == "windows":
+        steam_lib_path += "/win64" if env['arch'] == 'x86_64' else ""
+        steamworks_library = 'steam_api64.lib' if env['arch'] == 'x86_64' else 'steam_api.lib'
+        # steamworks_library = 'steam_api64.lib' if env['arch'] == 'x86_64' else 'steam_api.lib'
+
+    module_env.Append(CPPDEFINES=["GODUM_SUPPORT_STEAM"])
+    module_env.Append(CPPPATH=["3rdparty/steamworks_sdk/public"])
+    env.Append(LIBPATH=[steam_lib_path])
+    # env.Append(LIBS=[
+    #     steamworks_library.replace(".dll", "")
+    # ])
+    env.Append(LINKFLAGS=[
+        steamworks_library
+    ])
 
 def getSubdirs(path:str):
     result = ["src"]
     for root, folders, _ in os.walk(path):
         for folder in folders:
+            if not support_steam and folder.startswith("steam"):
+                continue
             result.append(os.path.join(root, folder))
     return result
 

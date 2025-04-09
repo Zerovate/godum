@@ -22,7 +22,9 @@
 #include "player/player.h"
 #include "player_component/input_player_component.h"
 #include "player_component/player_component.h"
+#ifdef GODUM_SUPPORT_STEAM
 #include "steam_multiplayer_peer/register_types.h"
+#endif
 #include "world/entity_manager_component.h"
 #include "world/world_component.h"
 #include "world/world_node.h"
@@ -33,7 +35,9 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+#ifdef GODUM_SUPPORT_STEAM
 	initialize_steam_multiplayer_peer(p_level);
+#endif
 	GDREGISTER_CLASS(Godum);
 	GDREGISTER_CLASS(Component);
 	GDREGISTER_CLASS(EntityComponent);
@@ -63,7 +67,9 @@ void uninitialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+#ifdef GODUM_SUPPORT_STEAM
 	uninitialize_steam_multiplayer_peer(p_level);
+#endif
 	memdelete(_game_instance);
 }
 
