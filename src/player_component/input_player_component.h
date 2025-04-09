@@ -18,15 +18,16 @@ class InputPlayerComponent : public PlayerComponent {
 public:
 	InputPlayerComponent();
 
-	void _ready();
-
+	void register_device_actions(TypedArray<StringName> p_actions);
+	void unregister_device_actions(TypedArray<StringName> p_actions);
 	Ref<InputDevice> get_device() const;
-	_FORCE_INLINE_ StringName get_built_in_action(const StringName &p_action) const;
+	_FORCE_INLINE_ StringName get_device_action(const StringName &p_action) const;
 
 private:
 	HashMap<StringName, StringName> m_built_in_action_map;
 
-	void _setup_device_actions();
+	void _on_player_changed(Player *prev_player, Player *new_player);
+	void _on_input_device_changed();
 	_FORCE_INLINE_ StringName _action_with_ext(const StringName &p_action) const;
 	TypedArray<InputEvent> _filter_events_by_device(const TypedArray<InputEvent> &p_events);
 

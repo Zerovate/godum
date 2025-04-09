@@ -26,9 +26,7 @@ void PlayerComponent::set_player(Player *p_player) {
 	set_actor(p_player);
 }
 
-void PlayerComponent::on_actor_changed(Node *prev_actor) {
-	emit_signal("player_changed");
-
+void PlayerComponent::on_actor_changed(Node *prev_actor, Node *new_actor) {
 	Player *prev_player = Object::cast_to<Player>(prev_actor);
 	if (prev_player) {
 		prev_player->unregister_component(this);
@@ -37,6 +35,7 @@ void PlayerComponent::on_actor_changed(Node *prev_actor) {
 	if (player) {
 		player->register_component(this);
 	}
+	emit_signal("player_changed", prev_player, player);
 	update_configuration_warnings();
 }
 
@@ -56,5 +55,7 @@ void PlayerComponent::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("on_actor_changed"), &PlayerComponent::on_actor_changed);
 
-	ADD_SIGNAL(MethodInfo("player_changed"));
+	ADD_SIGNAL(MethodInfo("player_changed"),
+			PropertyInfo(Variant::OBJECT, "prev_player", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Player"),
+			PropertyInfo(Variant::OBJECT, "prev_player", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Player"));
 }

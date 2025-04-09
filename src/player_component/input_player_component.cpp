@@ -18,43 +18,18 @@
 InputPlayerComponent::InputPlayerComponent() {
 	// input player component only support for local players.
 	m_allowed_actor_types = { "LocalPlayer" };
+	connect("player_changed", Callable(this, "_on_player_changed"));
 }
 
-void InputPlayerComponent::_ready() {
-	if (Engine::get_singleton()->is_editor_hint()) {
-		return;
-	}
-}
-
-StringName InputPlayerComponent::get_built_in_action(const StringName &p_action) const {
-	return m_built_in_action_map.has(p_action) ? m_built_in_action_map[p_action] : "";
-}
-
-Ref<InputDevice> InputPlayerComponent::get_device() const {
-	LocalPlayer *player = Object::cast_to<LocalPlayer>(m_actor);
-	ERR_FAIL_COND_V_MSG(player == nullptr, Ref<InputDevice>(), "InputPlayerComponent::get_device: actor is not a LocalPlayer");
-	return player->get_input_device();
-}
-
-void InputPlayerComponent::_setup_device_actions() {
+void InputPlayerComponent::register_device_actions(TypedArray<StringName> p_actions) {
 	InputMap *input_map = InputMap::get_singleton();
 
-	// remove all actions created before.
-	if (!m_built_in_action_map.is_empty()) {
-		for (auto action : m_built_in_action_map) {
-			// action has no ext will not be deleted.
-			if (action.key != action.value) {
-				input_map->erase_action(action.value);
-			}
-		}
-		m_built_in_action_map.clear();
-	}
-
-	// add new actions.
-	TypedArray<StringName> actions = input_map->call("get_actions");
-	for (int i = 0; i < actions.size(); i++) {
-		String action = actions[i];
-		if (action.begins_with("ui_") || action.ends_with("_keyboard") || action.ends_with("_joypad")) {
+	for (String action : p_actions) {
+		ERR_CONTINUE_EDMSG(!input_map->has_action(action),
+				vformat("InputPlayerComponent::register_device_actions: action %s not found in InputMap", action));
+		ERR_CONTINUE_EDMSG(action.ends_with("_keyboard") || action.ends_with("_joypad"),
+				vformat("InputPlayerComponent::register_device_actions: action %s ends with _keyboard or _joypad", action));
+		if (m_built_in_action_map.has(action)) {
 			continue;
 		}
 		TypedArray<InputEvent> events = input_map->call("action_get_events", action);
@@ -62,7 +37,7 @@ void InputPlayerComponent::_setup_device_actions() {
 		if (filtered_events.is_empty()) {
 			continue;
 		}
-		auto action_ext = _action_with_ext(action);
+		StringName action_ext = _action_with_ext(action);
 		if (action_ext != action && !input_map->has_action(action_ext)) {
 			input_map->add_action(action_ext);
 			for (int j = 0; j < filtered_events.size(); j++) {
@@ -72,6 +47,45 @@ void InputPlayerComponent::_setup_device_actions() {
 		}
 		m_built_in_action_map[action] = action_ext;
 	}
+}
+
+void InputPlayerComponent::unregister_device_actions(TypedArray<StringName> p_actions) {
+	for (StringName action : p_actions) {
+		ERR_CONTINUE_EDMSG(!m_built_in_action_map.has(action),
+				vformat("InputPlayerComponent::unregister_device_actions: action %s not found in built_in_action_map", action));
+		m_built_in_action_map.erase(action);
+	}
+}
+
+StringName InputPlayerComponent::get_device_action(const StringName &p_action) const {
+	return m_built_in_action_map.has(p_action) ? m_built_in_action_map[p_action] : "";
+}
+
+Ref<InputDevice> InputPlayerComponent::get_device() const {
+	LocalPlayer *player = Object::cast_to<LocalPlayer>(m_actor);
+	ERR_FAIL_COND_V_MSG(player == nullptr, Ref<InputDevice>(), "InputPlayerComponent::get_device: actor is not a LocalPlayer");
+	return player->get_input_device();
+}
+
+void InputPlayerComponent::_on_player_changed(Player *p_prev_player, Player *p_new_player) {
+	LocalPlayer *prev_player = Object::cast_to<LocalPlayer>(p_prev_player);
+	if (prev_player) {
+		prev_player->disconnect("device_changed", Callable(this, "_on_input_device_changed"));
+	}
+	LocalPlayer *new_player = Object::cast_to<LocalPlayer>(p_new_player);
+	if (new_player) {
+		new_player->connect("device_changed", Callable(this, "_on_input_device_changed"));
+	}
+	_on_input_device_changed();
+}
+
+void InputPlayerComponent::_on_input_device_changed() {
+	TypedArray<StringName> active_actions;
+	for (auto pair : m_built_in_action_map) {
+		active_actions.push_back(pair.key);
+	}
+	unregister_device_actions(active_actions);
+	register_device_actions(active_actions);
 }
 
 StringName InputPlayerComponent::_action_with_ext(const StringName &p_action) const {
@@ -117,7 +131,11 @@ TypedArray<InputEvent> InputPlayerComponent::_filter_events_by_device(const Type
 }
 
 void InputPlayerComponent::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("register_device_actions", "actions"), &InputPlayerComponent::register_device_actions);
+	ClassDB::bind_method(D_METHOD("unregister_device_actions", "actions"), &InputPlayerComponent::unregister_device_actions);
 	ClassDB::bind_method(D_METHOD("get_device"), &InputPlayerComponent::get_device);
+	ClassDB::bind_method(D_METHOD("get_device_action", "action"), &InputPlayerComponent::get_device_action);
 
-	ClassDB::bind_method(D_METHOD("get_built_in_action", "action"), &InputPlayerComponent::get_built_in_action);
+	ClassDB::bind_method(D_METHOD("_on_player_changed"), &InputPlayerComponent::_on_player_changed);
+	ClassDB::bind_method(D_METHOD("_on_input_device_changed"), &InputPlayerComponent::_on_input_device_changed);
 }

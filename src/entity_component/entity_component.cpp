@@ -8,12 +8,12 @@ EntityComponent::~EntityComponent() {
 	disconnect("actor_changed", Callable(this, "_on_actor_changed"));
 }
 
-void EntityComponent::_on_actor_changed(Node *prev_actor) {
+void EntityComponent::_on_actor_changed(Node *prev_actor, Node *new_actor) {
 	// register component to actor.
-	if (prev_actor){
+	if (prev_actor) {
 		ECM::get_singleton()->unregister_component(prev_actor, this);
 	}
-	ECM::get_singleton()->register_component(m_actor, this);
+	ECM::get_singleton()->register_component(new_actor, this);
 }
 
 void EntityComponent::_bind_methods() {

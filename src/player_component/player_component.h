@@ -16,7 +16,7 @@ public:
 	virtual PackedStringArray _get_configuration_warnings() const;
 
 private:
-	void on_actor_changed(Node* prev_actor);
+	void on_actor_changed(Node* prev_actor, Node* new_actor);
 
 protected:
 	static void _bind_methods();

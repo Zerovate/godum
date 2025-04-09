@@ -24,7 +24,7 @@ void Component::set_actor(Node *p_actor) {
 	if (m_actor != p_actor) {
 		Node *prev_actor = m_actor;
 		m_actor = p_actor;
-		emit_signal("actor_changed", prev_actor);
+		emit_signal("actor_changed", prev_actor, p_actor);
 	}
 }
 
@@ -80,5 +80,7 @@ void Component::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_actor"), &Component::get_actor);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "actor", PROPERTY_HINT_RESOURCE_TYPE, "Node", PROPERTY_USAGE_NONE), "set_actor", "get_actor");
 
-	ADD_SIGNAL(MethodInfo("actor_changed", PropertyInfo(Variant::OBJECT, "previous_actor", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Node")));
+	ADD_SIGNAL(MethodInfo("actor_changed",
+			PropertyInfo(Variant::OBJECT, "prev_actor", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Node"),
+			PropertyInfo(Variant::OBJECT, "new_actor", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Node")));
 }

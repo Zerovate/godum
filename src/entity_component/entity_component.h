@@ -8,7 +8,7 @@ public:
 	~EntityComponent();
 
 private:
-	void _on_actor_changed(Node* prev_actor);
+	void _on_actor_changed(Node* prev_actor, Node* new_actor);
 
 protected:
 	static void _bind_methods();
