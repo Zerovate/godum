@@ -22,3 +22,9 @@ android.debug.x86_64 = "bin/godum.android.editor.x86_64.so"
 android.release.x86_64 = "bin/godum.android.template_release.x86_64.so"
 android.debug.arm64 = "bin/godum.android.editor.arm64.so"
 android.release.arm64 = "bin/godum.android.template_release.arm64.so"
+
+[dependencies]
+macos.universal = { "macos/libsteam_api.dylib": "" }
+windows.x86_64 = { "windows/steam_api64.dll": "" }
+windows.x86_32 = { "windows/steam_api.dll": "" }
+linux.x86_64 = { "linux/libsteam_api.so": "" }
