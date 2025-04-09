@@ -55,7 +55,7 @@ void PlayerComponent::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("on_actor_changed"), &PlayerComponent::on_actor_changed);
 
-	ADD_SIGNAL(MethodInfo("player_changed"),
+	ADD_SIGNAL(MethodInfo("player_changed",
 			PropertyInfo(Variant::OBJECT, "prev_player", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Player"),
-			PropertyInfo(Variant::OBJECT, "prev_player", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Player"));
+			PropertyInfo(Variant::OBJECT, "prev_player", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Player")));
 }

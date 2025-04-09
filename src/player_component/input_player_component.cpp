@@ -29,7 +29,7 @@ void InputPlayerComponent::register_device_actions(TypedArray<StringName> p_acti
 				vformat("InputPlayerComponent::register_device_actions: action %s not found in InputMap", action));
 		ERR_CONTINUE_EDMSG(action.ends_with("_keyboard") || action.ends_with("_joypad"),
 				vformat("InputPlayerComponent::register_device_actions: action %s ends with _keyboard or _joypad", action));
-		if (m_built_in_action_map.has(action)) {
+		if (m_device_action_map.has(action)) {
 			continue;
 		}
 		TypedArray<InputEvent> events = input_map->call("action_get_events", action);
@@ -45,43 +45,45 @@ void InputPlayerComponent::register_device_actions(TypedArray<StringName> p_acti
 			}
 			print_line("InputMap add action: ", action, "-> ", action_ext);
 		}
-		m_built_in_action_map[action] = action_ext;
+		m_device_action_map[action] = action_ext;
 	}
 }
 
 void InputPlayerComponent::unregister_device_actions(TypedArray<StringName> p_actions) {
 	for (StringName action : p_actions) {
-		ERR_CONTINUE_EDMSG(!m_built_in_action_map.has(action),
+		ERR_CONTINUE_EDMSG(!m_device_action_map.has(action),
 				vformat("InputPlayerComponent::unregister_device_actions: action %s not found in built_in_action_map", action));
-		m_built_in_action_map.erase(action);
+		m_device_action_map.erase(action);
 	}
 }
 
 StringName InputPlayerComponent::get_device_action(const StringName &p_action) const {
-	return m_built_in_action_map.has(p_action) ? m_built_in_action_map[p_action] : "";
+	return m_device_action_map.has(p_action) ? m_device_action_map[p_action] : "";
 }
 
-Ref<InputDevice> InputPlayerComponent::get_device() const {
-	LocalPlayer *player = Object::cast_to<LocalPlayer>(m_actor);
-	ERR_FAIL_COND_V_MSG(player == nullptr, Ref<InputDevice>(), "InputPlayerComponent::get_device: actor is not a LocalPlayer");
+Ref<InputDevice> InputPlayerComponent::_get_device() const {
+	LocalPlayer *player = Object::cast_to<LocalPlayer>(get_player());
+	if (!player) {
+		return nullptr;
+	}
 	return player->get_input_device();
 }
 
 void InputPlayerComponent::_on_player_changed(Player *p_prev_player, Player *p_new_player) {
 	LocalPlayer *prev_player = Object::cast_to<LocalPlayer>(p_prev_player);
 	if (prev_player) {
-		prev_player->disconnect("device_changed", Callable(this, "_on_input_device_changed"));
+		prev_player->disconnect("input_device_changed", Callable(this, "_on_input_device_changed"));
 	}
 	LocalPlayer *new_player = Object::cast_to<LocalPlayer>(p_new_player);
 	if (new_player) {
-		new_player->connect("device_changed", Callable(this, "_on_input_device_changed"));
+		new_player->connect("input_device_changed", Callable(this, "_on_input_device_changed"));
 	}
 	_on_input_device_changed();
 }
 
 void InputPlayerComponent::_on_input_device_changed() {
 	TypedArray<StringName> active_actions;
-	for (auto pair : m_built_in_action_map) {
+	for (auto pair : m_device_action_map) {
 		active_actions.push_back(pair.key);
 	}
 	unregister_device_actions(active_actions);
@@ -89,7 +91,10 @@ void InputPlayerComponent::_on_input_device_changed() {
 }
 
 StringName InputPlayerComponent::_action_with_ext(const StringName &p_action) const {
-	Ref<InputDevice> device = get_device();
+	Ref<InputDevice> device = _get_device();
+	if (device.is_null() || device->get_type() == InputDevice::DEVICETYPE_ALL) {
+		return p_action;
+	}
 	switch (device->get_type()) {
 		case InputDevice::DeviceType::DEVICETYPE_KEYBOARD:
 			return String(p_action) + "_keyboard";
@@ -102,7 +107,7 @@ StringName InputPlayerComponent::_action_with_ext(const StringName &p_action) co
 }
 
 TypedArray<InputEvent> InputPlayerComponent::_filter_events_by_device(const TypedArray<InputEvent> &p_events) {
-	Ref<InputDevice> device = get_device();
+	Ref<InputDevice> device = _get_device();
 	if (device.is_null() || device->get_type() == InputDevice::DEVICETYPE_ALL) {
 		return p_events;
 	}
@@ -133,7 +138,6 @@ TypedArray<InputEvent> InputPlayerComponent::_filter_events_by_device(const Type
 void InputPlayerComponent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("register_device_actions", "actions"), &InputPlayerComponent::register_device_actions);
 	ClassDB::bind_method(D_METHOD("unregister_device_actions", "actions"), &InputPlayerComponent::unregister_device_actions);
-	ClassDB::bind_method(D_METHOD("get_device"), &InputPlayerComponent::get_device);
 	ClassDB::bind_method(D_METHOD("get_device_action", "action"), &InputPlayerComponent::get_device_action);
 
 	ClassDB::bind_method(D_METHOD("_on_player_changed"), &InputPlayerComponent::_on_player_changed);

@@ -2,7 +2,6 @@
 
 LocalPlayer::LocalPlayer() {
 	m_role = ROLE_AutonomouseProxy;
-	m_input_device = Ref<InputDevice>(memnew(InputDevice));
 }
 
 void LocalPlayer::set_role(Role role) {

@@ -20,6 +20,10 @@ public:
 	void _exit_tree();
 
 protected:
+#ifdef GODUM_MODULE
+	void _notification(int p_what);
+#endif
+
 	Node *m_actor = nullptr;
 
 	Vector<StringName> m_allowed_actor_types = {};

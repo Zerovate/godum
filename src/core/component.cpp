@@ -20,6 +20,19 @@ void Component::_exit_tree() {
 	set_actor(nullptr);
 }
 
+#ifdef GODUM_MODULE
+void Component::_notification(int p_what) {
+	switch (p_what) {
+		case NOTIFICATION_ENTER_TREE: {
+			_enter_tree();
+		} break;
+		case NOTIFICATION_EXIT_TREE: {
+			_exit_tree();
+		} break;
+	}
+}
+#endif
+
 void Component::set_actor(Node *p_actor) {
 	if (m_actor != p_actor) {
 		Node *prev_actor = m_actor;
