@@ -9,7 +9,6 @@ public:
 
 private:
 	void _on_actor_changed(Node* prev_actor);
-	Node *prev_actor = nullptr;
 
 protected:
 	static void _bind_methods();
