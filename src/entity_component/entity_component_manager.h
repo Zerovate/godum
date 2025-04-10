@@ -19,6 +19,7 @@ class ECM : public Object {
 	static ECM *singleton;
 
 public:
+	ECM();
 	static ECM *get_singleton();
 
 	bool register_component(Node *entity, EntityComponent *component);
@@ -29,12 +30,12 @@ public:
 	EntityComponent *entity_get_first_component(Node *entity, const StringName &type) const;
 
 	// component iterators.
-	TypedArray<EntityComponent> get_components() const;
+	TypedArray<EntityComponent> get_components(const StringName &p_name = "") const;
 
 protected:
 	static void _bind_methods();
 
 private:
 	HashMap<Node *, HashSet<EntityComponent *>> m_entity_components;
-	HashSet<EntityComponent *> m_components;
+	HashMap<StringName, Vector<EntityComponent *>> m_components;
 };

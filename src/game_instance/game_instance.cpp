@@ -7,6 +7,10 @@
 
 GameInstance *GameInstance::singleton = nullptr;
 
+GameInstance::GameInstance() {
+	singleton = this;
+}
+
 GameInstance *GameInstance::get_singleton() {
 	return singleton;
 }

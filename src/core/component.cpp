@@ -10,8 +10,14 @@
 
 void Component::_enter_tree() {
 	Node *actor = _try_find_actor();
-	if (!Engine::get_singleton()->is_editor_hint()) {
-		ERR_FAIL_COND_MSG(!actor, "Actor not found");
+	if (!actor) {
+		if (Engine::get_singleton()->is_editor_hint()) {
+			WARN_PRINT(vformat("Component %s has no actor", get_name()));
+		} else {
+			CRASH_NOW_MSG(vformat("Component %s has no actor", get_path()));
+		}
+	} else {
+		print_line(vformat("Component %s bind actor %s", get_name(), actor->get_name()));
 	}
 	set_actor(actor);
 }
@@ -46,8 +52,11 @@ Node *Component::_try_find_actor() {
 	while (parent_node) {
 		if (_is_actor_type_valid(parent_node)) {
 			return parent_node;
+		} else if (parent_node->is_class("Component")) {
+			parent_node = parent_node->get_parent();
+		} else {
+			return nullptr;
 		}
-		parent_node = parent_node->get_parent();
 	}
 	return nullptr;
 }
@@ -59,11 +68,6 @@ Node *Component::get_actor() {
 bool Component::_is_actor_type_valid(Node *p_actor) {
 	// actor must be valid
 	if (!p_actor) {
-		return false;
-	}
-
-	// actor can not be component
-	if (p_actor->is_class("Component")) {
 		return false;
 	}
 

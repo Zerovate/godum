@@ -23,6 +23,7 @@ private:
 	static GameInstance *singleton;
 
 public:
+	GameInstance();
 	static GameInstance *get_singleton();
 
 	WorldNode *get_world() const;

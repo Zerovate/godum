@@ -30,6 +30,7 @@
 #include "world/world_node.h"
 
 static GameInstance *_game_instance = nullptr;
+static ECM *_entity_component_manager = nullptr;
 
 void initialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -53,13 +54,16 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_ABSTRACT_CLASS(WorldComponent);
 	GDREGISTER_VIRTUAL_CLASS(EntityManagerComponent);
 
-	_game_instance = memnew(GameInstance);
 	GDREGISTER_CLASS(GameInstance);
+	_game_instance = memnew(GameInstance);
+	GDREGISTER_CLASS(ECM);
+	_entity_component_manager = memnew(ECM);
 #ifdef GODUM_MODULE
 	Engine::get_singleton()->add_singleton(Engine::Singleton("GameInstance", GameInstance::get_singleton()));
+	Engine::get_singleton()->add_singleton(Engine::Singleton("ECM", ECM::get_singleton()));
 #elif GODUM_GDEXTENSION
 	Engine::get_singleton()->register_singleton("GameInstance", GameInstance::get_singleton());
-	// Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());
+	Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());
 #endif
 }
 
@@ -71,6 +75,7 @@ void uninitialize_godum_module(ModuleInitializationLevel p_level) {
 	uninitialize_steam_multiplayer_peer(p_level);
 #endif
 	memdelete(_game_instance);
+	memdelete(_entity_component_manager);
 }
 
 #ifdef GODUM_GDEXTENSION
