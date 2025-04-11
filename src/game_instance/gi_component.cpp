@@ -1,17 +1,18 @@
 #include "gi_component.h"
 
+#include <scene/main/scene_tree.h>
 #include <scene/main/window.h>
 
 GIComponent::GIComponent() {
-	m_allowed_actor_types = {
-		"GameInstance"
-	};
 	connect("registered", Callable(this, "_on_registered"));
 	connect("unregistered", Callable(this, "_on_unregistered"));
 }
 
 void GIComponent::_on_registered() {
-	get_tree()->get_root()->add_child(this);
+	SceneTree *scene_tree = Object::cast_to<SceneTree>(::OS::get_singleton()->get_main_loop());
+	if (scene_tree) {
+		scene_tree->get_root()->call_deferred("add_child", this);
+	}
 }
 
 void GIComponent::_on_unregistered() {
