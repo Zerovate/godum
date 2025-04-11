@@ -59,6 +59,7 @@ bool ComponentHolder<T>::register_component(T *component) {
 		class_name = ClassDB::get_parent_class(class_name);
 		ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 	}
+	component->emit_signal("registered");
 	return true;
 }
 
@@ -71,6 +72,7 @@ bool ComponentHolder<T>::unregister_component(T *component) {
 		class_name = ClassDB::get_parent_class(class_name);
 		ERR_FAIL_COND_V_MSG(class_name.is_empty(), false, "Invalid parent class");
 	}
+	component->emit_signal("unregistered");
 	return true;
 }
 

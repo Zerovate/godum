@@ -100,4 +100,6 @@ void Component::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("actor_changed",
 			PropertyInfo(Variant::OBJECT, "prev_actor", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Node"),
 			PropertyInfo(Variant::OBJECT, "new_actor", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Node")));
+	ADD_SIGNAL(MethodInfo("registered"));
+	ADD_SIGNAL(MethodInfo("unregistered"));
 }
