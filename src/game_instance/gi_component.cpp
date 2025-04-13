@@ -1,11 +1,15 @@
 #include "gi_component.h"
 
+#include "game_instance.h"
+
 #include <scene/main/scene_tree.h>
 #include <scene/main/window.h>
 
 GIComponent::GIComponent() {
 	connect("registered", Callable(this, "_on_registered"));
 	connect("unregistered", Callable(this, "_on_unregistered"));
+	GameInstance *game_instance = GameInstance::get_singleton();
+	game_instance->register_component(this);
 }
 
 void GIComponent::_on_registered() {
@@ -16,7 +20,9 @@ void GIComponent::_on_registered() {
 }
 
 void GIComponent::_on_unregistered() {
-	get_tree()->get_root()->remove_child(this);
+	if (get_parent()) {
+		get_parent()->call_deferred("remove_child", this);
+	}
 }
 
 void GIComponent::_bind_methods() {

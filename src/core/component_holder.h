@@ -21,6 +21,7 @@ class ComponentHolder {
 public:
 	virtual TypedArray<T> get_components(const StringName &name) const;
 	virtual T *get_component(const StringName &name) const;
+	virtual bool has_component(const StringName &name) const;
 	virtual bool register_component(T *component);
 	virtual bool unregister_component(T *component);
 
@@ -45,6 +46,11 @@ T *ComponentHolder<T>::get_component(const StringName &name) const {
 		return *(m_components_map[name].begin());
 	}
 	return nullptr;
+}
+
+template <typename T>
+bool ComponentHolder<T>::has_component(const StringName &name) const {
+	return m_components_map.has(name);
 }
 
 template <typename T>
@@ -84,6 +90,9 @@ public:                                                                         
 	virtual m_class *get_component(const StringName &name) const override {             \
 		return ComponentHolder<m_class>::get_component(name);                           \
 	}                                                                                   \
+	virtual bool has_component(const StringName &name) const override {                 \
+		return ComponentHolder<m_class>::has_component(name);                           \
+	}                                                                                   \
 	virtual bool register_component(m_class *component) override {                      \
 		return ComponentHolder<m_class>::register_component(component);                 \
 	}                                                                                   \
@@ -94,5 +103,6 @@ public:                                                                         
 #define COMPONENT_HOLDER_BIND_METHODS(m_class)                                                       \
 	ClassDB::bind_method(D_METHOD("get_components", "name"), &m_class::get_components);              \
 	ClassDB::bind_method(D_METHOD("get_component", "name"), &m_class::get_component);                \
+	ClassDB::bind_method(D_METHOD("has_component", "name"), &m_class::has_component);                \
 	ClassDB::bind_method(D_METHOD("register_component", "component"), &m_class::register_component); \
 	ClassDB::bind_method(D_METHOD("unregister_component", "component"), &m_class::unregister_component);
