@@ -13,7 +13,7 @@ class Component : public Node {
 
 public:
 	void set_actor(Node *p_actor);
-	Node *get_actor();
+	Node *get_actor() const;
 
 public:
 	void _enter_tree();

@@ -16,6 +16,14 @@ bool ECM::register_component(Node *entity, EntityComponent *component) {
 	if (!entity || !component) {
 		return false;
 	}
+	if (!entity->is_in_group("entity")) {
+		const bool is_in_editor = Engine::get_singleton()->is_editor_hint();
+		if (is_in_editor) {
+			entity->add_to_group("entity");
+		} else {
+			print_error(vformat("entity %s is not added to group 'entity'", entity->get_path()));
+		}
+	}
 	if (m_components.has(component->get_class_name()) && m_components[component->get_class_name()].has(component)) {
 		// unregister component first
 		unregister_component(component->get_actor(), component);
@@ -33,7 +41,13 @@ bool ECM::unregister_component(Node *entity, EntityComponent *component) {
 	}
 	ERR_FAIL_COND_V_MSG(!m_entity_components.has(entity), false, "node is not entity");
 	m_components[component->get_class_name()].erase(component);
-	m_entity_components[entity].erase(component);
+	auto &components = m_entity_components.get(entity);
+	components.erase(component);
+
+	if (components.is_empty()) {
+		m_entity_components.erase(entity);
+		entity->remove_from_group("entity");
+	}
 	return true;
 }
 

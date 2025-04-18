@@ -61,7 +61,7 @@ Node *Component::_try_find_actor() {
 	return nullptr;
 }
 
-Node *Component::get_actor() {
+Node *Component::get_actor() const {
 	return m_actor;
 }
 

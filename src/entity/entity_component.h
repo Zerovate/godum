@@ -7,8 +7,11 @@ public:
 	EntityComponent();
 	~EntityComponent();
 
+	Node *get_entity() const;
+	void set_entity(Node *entity);
+
 private:
-	void _on_actor_changed(Node* prev_actor, Node* new_actor);
+	void _on_actor_changed(Node *prev_actor, Node *new_actor);
 
 protected:
 	static void _bind_methods();

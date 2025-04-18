@@ -1,6 +1,7 @@
 #pragma once
 #include "core/component_holder.h"
 #include "player_component/player_component.h"
+#include "entity/entity_holder.h"
 
 #ifdef GODUM_MODULE
 #include <scene/main/node.h>
@@ -13,7 +14,7 @@
 using namespace godot;
 #endif // GODUM_GDEXTENSION;
 
-class Player : public Node, public ComponentHolder<PlayerComponent> {
+class Player : public Node, public ComponentHolder<PlayerComponent>, EntityHolder {
 	GDCLASS(Player, Node);
 
 public:
