@@ -9,6 +9,9 @@
 #endif
 
 void Component::_enter_tree() {
+	if (!m_find_actor_by_tree) {
+		return;
+	}
 	Node *actor = _try_find_actor();
 	if (!actor) {
 		if (Engine::get_singleton()->is_editor_hint()) {
@@ -23,6 +26,9 @@ void Component::_enter_tree() {
 }
 
 void Component::_exit_tree() {
+	if (!m_find_actor_by_tree) {
+		return;
+	}
 	set_actor(nullptr);
 }
 

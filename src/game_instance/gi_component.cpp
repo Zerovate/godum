@@ -6,10 +6,9 @@
 #include <scene/main/window.h>
 
 GIComponent::GIComponent() {
+	m_find_actor_by_tree = false;
 	connect("registered", Callable(this, "_on_registered"));
 	connect("unregistered", Callable(this, "_on_unregistered"));
-	GameInstance *game_instance = GameInstance::get_singleton();
-	game_instance->register_component(this);
 }
 
 void GIComponent::_on_registered() {

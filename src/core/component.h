@@ -29,6 +29,8 @@ protected:
 	Vector<StringName> m_support_actor_types = {};
 	Vector<StringName> m_unsupport_actor_types = {};
 
+	bool m_find_actor_by_tree = true;
+
 private:
 	bool _is_actor_type_valid(Node *p_actor);
 	Node *_try_find_actor();
