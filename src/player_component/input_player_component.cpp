@@ -17,7 +17,7 @@
 
 InputPlayerComponent::InputPlayerComponent() {
 	// input player component only support for local players.
-	m_allowed_actor_types = { "LocalPlayer" };
+	m_support_actor_types = { "LocalPlayer" };
 	connect("player_changed", Callable(this, "_on_player_changed"));
 }
 

@@ -1,7 +1,6 @@
 #pragma once
 #include "core/component_holder.h"
 #include "player_component/player_component.h"
-#include "entity/entity_holder.h"
 
 #ifdef GODUM_MODULE
 #include <scene/main/node.h>
@@ -14,7 +13,9 @@
 using namespace godot;
 #endif // GODUM_GDEXTENSION;
 
-class Player : public Node, public ComponentHolder<PlayerComponent>, EntityHolder {
+class EntityProxy;
+
+class Player : public Node, public ComponentHolder<PlayerComponent> {
 	GDCLASS(Player, Node);
 
 public:
@@ -29,11 +30,16 @@ public:
 	Role get_role() const { return m_role; }
 	virtual void set_role(Role role) { m_role = role; }
 
+	TypedArray<Node> get_pawns() const;
+	bool register_pawn(EntityProxy *pawn);
+	bool unregister_pawn(EntityProxy *pawn);
+
 protected:
 	Role m_role = ROLE_None;
 
 private:
 	HashMap<StringName, HashSet<PlayerComponent *>> m_player_components_map;
+	HashSet<EntityProxy *> m_pawns;
 
 protected:
 	static void _bind_methods();

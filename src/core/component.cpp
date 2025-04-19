@@ -70,11 +70,14 @@ bool Component::_is_actor_type_valid(Node *p_actor) {
 	if (!p_actor) {
 		return false;
 	}
+	if (p_actor->is_class("Component")) {
+		return false;
+	}
 
 	bool is_valid = false;
 	// check if actor type is allowed
-	if (!m_allowed_actor_types.is_empty()) {
-		for (auto type : m_allowed_actor_types) {
+	if (!m_support_actor_types.is_empty()) {
+		for (auto type : m_support_actor_types) {
 			if (p_actor->is_class(type)) {
 				return true;
 			}
@@ -84,7 +87,7 @@ bool Component::_is_actor_type_valid(Node *p_actor) {
 	}
 
 	// check if actor type is disallowed
-	for (auto type : m_disallowed_actor_types) {
+	for (auto type : m_unsupport_actor_types) {
 		if (p_actor->is_class(type)) {
 			return false;
 		}

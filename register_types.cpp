@@ -8,11 +8,10 @@
 #include <godot_cpp/classes/engine.hpp>
 #endif
 
-#include "godum.h"
-
 #include "core/component.h"
-#include "entity_component/entity_component.h"
-#include "entity_component/entity_component_manager.h"
+#include "entity/entity_component.h"
+#include "entity/entity_manager.h"
+#include "entity/entity_proxy.h"
 #include "game_instance/game_instance.h"
 #include "game_instance/gi_component.h"
 #include "game_instance/session_gi_component.h"
@@ -26,12 +25,11 @@
 #ifdef GODUM_SUPPORT_STEAM
 #include "steam_multiplayer_peer/register_types.h"
 #endif
-#include "world/entity_manager_component.h"
 #include "world/world_component.h"
 #include "world/world_node.h"
 
 static GameInstance *_game_instance = nullptr;
-static ECM *_entity_component_manager = nullptr;
+static EntityManager *_entity_component_manager = nullptr;
 
 void initialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -40,12 +38,11 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 #ifdef GODUM_SUPPORT_STEAM
 	initialize_steam_multiplayer_peer(p_level);
 #endif
-	GDREGISTER_CLASS(Godum);
 	GDREGISTER_CLASS(Component);
 
-	GDREGISTER_CLASS(ECM);
-	GDREGISTER_VIRTUAL_CLASS(EntityManagerComponent);
+	GDREGISTER_CLASS(EntityManager);
 	GDREGISTER_CLASS(EntityComponent);
+	GDREGISTER_CLASS(EntityProxy);
 
 	GDREGISTER_CLASS(GameInstance);
 	GDREGISTER_CLASS(GIComponent);
@@ -64,14 +61,14 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(WorldNode);
 	GDREGISTER_ABSTRACT_CLASS(WorldComponent);
 
-	_entity_component_manager = memnew(ECM);
+	_entity_component_manager = memnew(EntityManager);
 	_game_instance = memnew(GameInstance);
 #ifdef GODUM_MODULE
 	Engine::get_singleton()->add_singleton(Engine::Singleton("GameInstance", GameInstance::get_singleton()));
-	Engine::get_singleton()->add_singleton(Engine::Singleton("ECM", ECM::get_singleton()));
+	Engine::get_singleton()->add_singleton(Engine::Singleton("EntityManager", EntityManager::get_singleton()));
 #elif GODUM_GDEXTENSION
 	Engine::get_singleton()->register_singleton("GameInstance", GameInstance::get_singleton());
-	Engine::get_singleton()->register_singleton("ECM", ECM::get_singleton());
+	Engine::get_singleton()->register_singleton("EntityManager", EntityManager::get_singleton());
 #endif
 }
 

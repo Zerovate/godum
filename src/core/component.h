@@ -26,8 +26,8 @@ protected:
 
 	Node *m_actor = nullptr;
 
-	Vector<StringName> m_allowed_actor_types = {};
-	Vector<StringName> m_disallowed_actor_types = {};
+	Vector<StringName> m_support_actor_types = {};
+	Vector<StringName> m_unsupport_actor_types = {};
 
 private:
 	bool _is_actor_type_valid(Node *p_actor);

@@ -12,15 +12,22 @@ using namespace godot;
 #endif
 
 class EntityComponent;
+class EntityProxy;
 
-class ECM : public Object {
-	GDCLASS(ECM, Object)
+class EntityManager : public Object {
+	GDCLASS(EntityManager, Object)
 
-	static ECM *singleton;
+	static EntityManager *singleton;
 
 public:
-	ECM();
-	static ECM *get_singleton();
+	EntityManager();
+	static EntityManager *get_singleton();
+
+	_FORCE_INLINE_ bool is_entity_registered(Node *entity) const;
+	EntityProxy *get_entity_proxy(Node *entity) const;
+
+	bool register_entity(Node *entity);
+	bool unregister_entity(Node *entity);
 
 	bool register_component(Node *entity, EntityComponent *component);
 	bool unregister_component(Node *entity, EntityComponent *component);
@@ -36,6 +43,8 @@ protected:
 	static void _bind_methods();
 
 private:
+	HashMap<Node *, EntityProxy *> m_entity_proxies;
+
 	HashMap<Node *, HashSet<EntityComponent *>> m_entity_components;
 	HashMap<StringName, Vector<EntityComponent *>> m_components;
 };

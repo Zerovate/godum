@@ -12,7 +12,7 @@
 
 PlayerComponent::PlayerComponent() {
 	// only Player or PlayerComponent (for node tidy) can be parent.
-	m_allowed_actor_types = { "Player" };
+	m_support_actor_types = { "Player" };
 	connect("actor_changed", Callable(this, "on_actor_changed"));
 }
 PlayerComponent::~PlayerComponent() {
