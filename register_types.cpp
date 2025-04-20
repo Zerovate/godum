@@ -55,11 +55,11 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(LocalPlayer);
 	GDREGISTER_CLASS(NetPlayer);
 
-	GDREGISTER_ABSTRACT_CLASS(PlayerComponent);
+	GDREGISTER_CLASS(PlayerComponent);
 	GDREGISTER_CLASS(InputPlayerComponent);
 
+	GDREGISTER_CLASS(WorldComponent);
 	GDREGISTER_CLASS(WorldNode);
-	GDREGISTER_ABSTRACT_CLASS(WorldComponent);
 
 	_entity_component_manager = memnew(EntityManager);
 	_game_instance = memnew(GameInstance);

@@ -15,6 +15,9 @@ public:
 	void set_actor(Node *p_actor);
 	Node *get_actor() const;
 
+	GDVIRTUAL0R(StringName, type);
+	StringName type() const { return get_class_static(); }
+
 public:
 	void _enter_tree();
 	void _exit_tree();

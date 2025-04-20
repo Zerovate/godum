@@ -22,8 +22,8 @@ public:
 	virtual TypedArray<T> get_components(const StringName &name) const;
 	virtual T *get_component(const StringName &name) const;
 	virtual bool has_component(const StringName &name) const;
-	virtual bool register_component(T *component, const StringName &p_name = StringName());
-	virtual bool unregister_component(T *component, const StringName &p_name = StringName());
+	virtual bool register_component(T *component);
+	virtual bool unregister_component(T *component);
 
 protected:
 	HashMap<StringName, HashSet<T *>> m_components_map;
@@ -54,13 +54,14 @@ bool ComponentHolder<T>::has_component(const StringName &name) const {
 }
 
 template <typename T>
-bool ComponentHolder<T>::register_component(T *component, const StringName &p_name) {
+bool ComponentHolder<T>::register_component(T *component) {
 	ERR_FAIL_COND_V(!component, false);
-	if (!p_name.is_empty()) {
-		if (!m_components_map.has(p_name)) {
-			m_components_map.insert(p_name, {});
+	StringName type = component->call("type");
+	if (!type.is_empty()) {
+		if (!m_components_map.has(type)) {
+			m_components_map.insert(type, {});
 		}
-		m_components_map[p_name].insert(component);
+		m_components_map[type].insert(component);
 	}
 	StringName class_name = component->get_class();
 	while (class_name != StringName("Component")) {
@@ -76,10 +77,11 @@ bool ComponentHolder<T>::register_component(T *component, const StringName &p_na
 }
 
 template <typename T>
-bool ComponentHolder<T>::unregister_component(T *component, const StringName &p_name) {
+bool ComponentHolder<T>::unregister_component(T *component) {
 	ERR_FAIL_COND_V(!component, false);
-	if (!p_name.is_empty()) {
-		m_components_map[p_name].erase(component);
+	StringName type = component->call("type");
+	if (!type.is_empty()) {
+		m_components_map[type].erase(component);
 	}
 	StringName class_name = component->get_class();
 	while (class_name != StringName("Component")) {
@@ -91,27 +93,27 @@ bool ComponentHolder<T>::unregister_component(T *component, const StringName &p_
 	return true;
 }
 
-#define COMPONENT_HOLDER_IMPLEMENT(m_class)                                                                   \
-public:                                                                                                       \
-	virtual TypedArray<m_class> get_components(const StringName &name) const override {                       \
-		return ComponentHolder<m_class>::get_components(name);                                                \
-	}                                                                                                         \
-	virtual m_class *get_component(const StringName &name) const override {                                   \
-		return ComponentHolder<m_class>::get_component(name);                                                 \
-	}                                                                                                         \
-	virtual bool has_component(const StringName &name) const override {                                       \
-		return ComponentHolder<m_class>::has_component(name);                                                 \
-	}                                                                                                         \
-	virtual bool register_component(m_class *component, const StringName &p_name = StringName()) override {   \
-		return ComponentHolder<m_class>::register_component(component, p_name);                               \
-	}                                                                                                         \
-	virtual bool unregister_component(m_class *component, const StringName &p_name = StringName()) override { \
-		return ComponentHolder<m_class>::unregister_component(component, p_name);                             \
+#define COMPONENT_HOLDER_IMPLEMENT(m_class)                                             \
+public:                                                                                 \
+	virtual TypedArray<m_class> get_components(const StringName &name) const override { \
+		return ComponentHolder<m_class>::get_components(name);                          \
+	}                                                                                   \
+	virtual m_class *get_component(const StringName &name) const override {             \
+		return ComponentHolder<m_class>::get_component(name);                           \
+	}                                                                                   \
+	virtual bool has_component(const StringName &name) const override {                 \
+		return ComponentHolder<m_class>::has_component(name);                           \
+	}                                                                                   \
+	virtual bool register_component(m_class *component) override {                      \
+		return ComponentHolder<m_class>::register_component(component);                 \
+	}                                                                                   \
+	virtual bool unregister_component(m_class *component) override {                    \
+		return ComponentHolder<m_class>::unregister_component(component);               \
 	}
 
-#define COMPONENT_HOLDER_BIND_METHODS(m_class)                                                               \
-	ClassDB::bind_method(D_METHOD("get_components", "name"), &m_class::get_components);                      \
-	ClassDB::bind_method(D_METHOD("get_component", "name"), &m_class::get_component);                        \
-	ClassDB::bind_method(D_METHOD("has_component", "name"), &m_class::has_component);                        \
-	ClassDB::bind_method(D_METHOD("register_component", "component", "name"), &m_class::register_component); \
-	ClassDB::bind_method(D_METHOD("unregister_component", "component", "name"), &m_class::unregister_component);
+#define COMPONENT_HOLDER_BIND_METHODS(m_class)                                                       \
+	ClassDB::bind_method(D_METHOD("get_components", "name"), &m_class::get_components);              \
+	ClassDB::bind_method(D_METHOD("get_component", "name"), &m_class::get_component);                \
+	ClassDB::bind_method(D_METHOD("has_component", "name"), &m_class::has_component);                \
+	ClassDB::bind_method(D_METHOD("register_component", "component"), &m_class::register_component); \
+	ClassDB::bind_method(D_METHOD("unregister_component", "component"), &m_class::unregister_component);
