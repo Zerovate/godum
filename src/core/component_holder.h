@@ -56,12 +56,14 @@ bool ComponentHolder<T>::has_component(const StringName &name) const {
 template <typename T>
 bool ComponentHolder<T>::register_component(T *component) {
 	ERR_FAIL_COND_V(!component, false);
-	StringName type = component->call("type");
-	if (!type.is_empty()) {
-		if (!m_components_map.has(type)) {
-			m_components_map.insert(type, {});
+	if(component->has_method("type")){
+		StringName type = component->call("type");
+		if (!type.is_empty()) {
+			if (!m_components_map.has(type)) {
+				m_components_map.insert(type, {});
+			}
+			m_components_map[type].insert(component);
 		}
-		m_components_map[type].insert(component);
 	}
 	StringName class_name = component->get_class();
 	while (class_name != StringName("Component")) {
