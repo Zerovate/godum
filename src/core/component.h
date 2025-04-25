@@ -16,6 +16,7 @@ public:
 	Node *get_actor() const;
 
 	GDVIRTUAL0R(StringName, type);
+	GDVIRTUAL0R(bool, is_unique);
 
 public:
 	void _enter_tree();

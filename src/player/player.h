@@ -23,9 +23,8 @@ public:
 
 	enum Role {
 		ROLE_None,
-		ROLE_SimulatedProxy,
-		ROLE_AutonomouseProxy,
-		ROLE_Authority
+		ROLE_Local,
+		ROLE_Remote
 	};
 	Role get_role() const { return m_role; }
 	virtual void set_role(Role role) { m_role = role; }

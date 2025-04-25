@@ -11,7 +11,6 @@
 using namespace godot;
 #endif
 
-class LocalPlayer;
 class WorldNode;
 
 // 游戏实例，用于管理玩家、游戏设置等, 场景切换
@@ -27,9 +26,6 @@ public:
 	static GameInstance *get_singleton();
 
 	WorldNode *get_world() const;
-
-protected:
-	Vector<LocalPlayer *> local_players;
 
 private:
 	WorldNode *world = nullptr;

@@ -1,6 +1,7 @@
 #include "input_player_component.h"
 
-#include "player/local_player.h"
+#include "player/player.h"
+#include "input/input_device_pc.h"
 
 #ifdef GODUM_MODULE
 #include <core/input/input_map.h>
@@ -17,7 +18,7 @@
 
 InputPlayerComponent::InputPlayerComponent() {
 	// input player component only support for local players.
-	m_support_actor_types = { "LocalPlayer" };
+	m_support_actor_types = { "Player" };
 	connect("player_changed", Callable(this, "_on_player_changed"));
 }
 
@@ -62,15 +63,16 @@ StringName InputPlayerComponent::get_device_action(const StringName &p_action) c
 }
 
 Ref<InputDevice> InputPlayerComponent::_get_device() const {
-	LocalPlayer *player = Object::cast_to<LocalPlayer>(get_player());
-	if (!player) {
+	Player *player = get_player();
+	if (!player->get_role() == Player::Role::ROLE_Local) {
 		return nullptr;
 	}
-	return player->get_input_device();
+	InputDevicePC* input_device_pc = Object::cast_to<InputDevicePC>(player->get_component("InputDevicePC"));
+	return input_device_pc->get_input_device();
 }
 
 void InputPlayerComponent::_on_player_changed(Player *p_prev_player, Player *p_new_player) {
-	LocalPlayer *prev_player = Object::cast_to<LocalPlayer>(p_prev_player);
+	InputDevicePC * input_device_pc = Object::cast<InputDevicePC>(p_prev_player->get_component("InputDevicePC"));
 	if (prev_player) {
 		prev_player->disconnect("input_device_changed", Callable(this, "_on_input_device_changed"));
 	}

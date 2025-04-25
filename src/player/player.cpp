@@ -28,9 +28,9 @@ void Player::_bind_methods() {
 	COMPONENT_HOLDER_BIND_METHODS(Player);
 
 	BIND_ENUM_CONSTANT(ROLE_None);
-	BIND_ENUM_CONSTANT(ROLE_SimulatedProxy);
-	BIND_ENUM_CONSTANT(ROLE_AutonomouseProxy);
-	BIND_ENUM_CONSTANT(ROLE_Authority);
+	BIND_ENUM_CONSTANT(ROLE_Local);
+	BIND_ENUM_CONSTANT(ROLE_Remote);
+	BIND_ENUM_CONSTANT(ROLE_AI);
 	ClassDB::bind_method(D_METHOD("get_role"), &Player::get_role);
 	ClassDB::bind_method(D_METHOD("set_role", "role"), &Player::set_role);
 	ADD_PROPERTY(

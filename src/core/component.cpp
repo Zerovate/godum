@@ -107,6 +107,7 @@ void Component::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "actor", PROPERTY_HINT_RESOURCE_TYPE, "Node", PROPERTY_USAGE_NONE), "set_actor", "get_actor");
 
 	GDVIRTUAL_BIND(type);
+	GDVIRTUAL_BIND(is_unique);
 
 	ADD_SIGNAL(MethodInfo("actor_changed",
 			PropertyInfo(Variant::OBJECT, "prev_actor", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT, "Node"),

@@ -51,9 +51,7 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_CLASS(EnhancedInputMap);
 	GDREGISTER_CLASS(InputDevice);
 
-	GDREGISTER_ABSTRACT_CLASS(Player);
-	GDREGISTER_CLASS(LocalPlayer);
-	GDREGISTER_CLASS(NetPlayer);
+	GDREGISTER_CLASS(Player);
 
 	GDREGISTER_CLASS(PlayerComponent);
 	GDREGISTER_CLASS(InputPlayerComponent);
