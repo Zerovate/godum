@@ -34,8 +34,7 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_role", "role"), &Player::set_role);
 	ADD_PROPERTY(
 			PropertyInfo(Variant::INT, "role",
-					PROPERTY_HINT_ENUM, "None,Simulated Proxy,Autonomous Proxy,Authority",
-					PROPERTY_USAGE_NONE),
+					PROPERTY_HINT_ENUM, "None,Local,Remote"),
 			"set_role", "get_role");
 
 	ClassDB::bind_method(D_METHOD("get_pawns"), &Player::get_pawns);
