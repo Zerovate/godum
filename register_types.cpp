@@ -17,8 +17,7 @@
 #include "game_instance/session_gi_component.h"
 #include "input/enhanced_input_map.h"
 #include "input/input_device.h"
-#include "player/local_player.h"
-#include "player/net_player.h"
+#include "input/input_device_pc.h"
 #include "player/player.h"
 #include "player_component/input_player_component.h"
 #include "player_component/player_component.h"
@@ -50,6 +49,7 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 
 	GDREGISTER_CLASS(EnhancedInputMap);
 	GDREGISTER_CLASS(InputDevice);
+	GDREGISTER_CLASS(InputDevicePC);
 
 	GDREGISTER_CLASS(Player);
 
