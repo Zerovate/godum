@@ -9,9 +9,9 @@
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)
-#define LOG_LEVEL(msg, level) GodumLogger::get_singleton()->log(GodumLogger::level, msg, __FILE__, __LINE__, __PRETTY_FUNCTION__)
+#define LOG_LEVEL(msg, level) GodumLogger::get_singleton()->log(GodumLogger::level, msg, __FILE__, __LINE__)
 #else
-#define LOG_LEVEL(msg, level) GodumLogger::get_singleton()->log(GodumLogger::level, msg, __FILE__, __LINE__, __func__)
+#define LOG_LEVEL(msg, level) GodumLogger::get_singleton()->log(GodumLogger::level, msg, __FILE__, __LINE__)
 #endif
 
 #define LOG_SET_LEVEL(level) GodumLogger::get_singleton()->set_min_level(GodumLogger::level)
@@ -54,7 +54,7 @@ public:
 		return &instance;
 	}
 
-	void log(LogLevel level, const String &msg, const char *file, int line, const char *func) {
+	void log(LogLevel level, const String &msg, const char *file, int line) {
 		if (level < min_level) {
 			return;
 		}
@@ -64,8 +64,8 @@ public:
 		const char *short_file = strrchr(file, '/');
 #endif
 		short_file = short_file ? short_file + 1 : file;
-		String code_pos = vformat("[%s:%d@%s]",
-				short_file, line, func);
+		String code_pos = vformat("[%s:%d]",
+				short_file, line);
 		String full_msg = vformat("%s%s %s %s %s\033[0m",
 				get_color_code(level),
 				get_timestamp(),
