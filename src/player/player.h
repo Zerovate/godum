@@ -14,6 +14,7 @@ using namespace godot;
 #endif // GODUM_GDEXTENSION;
 
 class EntityProxy;
+class InputDevice;
 
 class Player : public Node, public ComponentHolder<PlayerComponent> {
 	GDCLASS(Player, Node);
@@ -33,8 +34,12 @@ public:
 	bool register_pawn(EntityProxy *pawn);
 	bool unregister_pawn(EntityProxy *pawn);
 
+	Ref<InputDevice> get_input_device() const;
+	void set_input_device(const Ref<InputDevice> &device);
+
 protected:
 	Role m_role = ROLE_None;
+	Ref<InputDevice> m_input_device;
 
 private:
 	HashMap<StringName, HashSet<PlayerComponent *>> m_player_components_map;

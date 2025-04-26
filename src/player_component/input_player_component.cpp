@@ -70,22 +70,15 @@ Ref<InputDevice> InputPlayerComponent::_get_device() const {
 	if (!player->get_role() == Player::Role::ROLE_Local) {
 		return nullptr;
 	}
-	InputDevicePC *input_device_pc = Object::cast_to<InputDevicePC>(player->get_component("InputDevicePC"));
-	return input_device_pc->get_input_device();
+	return player->get_input_device();
 }
 
 void InputPlayerComponent::_on_player_changed(Player *p_prev_player, Player *p_new_player) {
 	if (p_prev_player) {
-		InputDevicePC *input_device_pc = Object::cast_to<InputDevicePC>(p_prev_player->get_component("InputDevicePC"));
-		if (input_device_pc) {
-			input_device_pc->disconnect("input_device_changed", Callable(this, "_on_input_device_changed"));
-		}
+		p_prev_player->disconnect("input_device_changed", Callable(this, "_on_input_device_changed"));
 	}
 	if (p_new_player) {
-		InputDevicePC *new_input_device_pc = Object::cast_to<InputDevicePC>(p_new_player->get_component("InputDevicePC"));
-		if (new_input_device_pc) {
-			new_input_device_pc->connect("input_device_changed", Callable(this, "_on_input_device_changed"));
-		}
+		p_new_player->connect("input_device_changed", Callable(this, "_on_input_device_changed"));
 	}
 	_on_input_device_changed();
 }
