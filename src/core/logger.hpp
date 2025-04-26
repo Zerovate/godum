@@ -8,11 +8,7 @@
 #include <windows.h>
 #endif
 
-#if defined(__GNUC__) || defined(__clang__)
 #define LOG_LEVEL(msg, level) GodumLogger::get_singleton()->log(GodumLogger::level, msg, __FILE__, __LINE__)
-#else
-#define LOG_LEVEL(msg, level) GodumLogger::get_singleton()->log(GodumLogger::level, msg, __FILE__, __LINE__)
-#endif
 
 #define LOG_SET_LEVEL(level) GodumLogger::get_singleton()->set_min_level(GodumLogger::level)
 #define LOG_DEBUG(msg) LOG_LEVEL(msg, LOG_LEVEL_DEBUG)
@@ -20,13 +16,6 @@
 #define LOG_WARNING(msg) LOG_LEVEL(msg, LOG_LEVEL_WARNING)
 #define LOG_ERROR(msg) LOG_LEVEL(msg, LOG_LEVEL_ERROR)
 #define LOG_FATAL(msg) LOG_LEVEL(msg, LOG_LEVEL_FATAL)
-
-#ifdef __GNUC__
-#define LOG_DEBUG(msg) ({                                           \
-	static_assert(__builtin_constant_p(msg), "必须在函数体内使用"); \
-	log(DEBUG, msg, __FILE__, __LINE__, __PRETTY_FUNCTION__);       \
-})
-#endif
 
 class GodumLogger {
 public:
@@ -66,11 +55,11 @@ public:
 		short_file = short_file ? short_file + 1 : file;
 		String code_pos = vformat("[%s:%d]",
 				short_file, line);
-		String full_msg = vformat("%s%s %s %s %s\033[0m",
+		String full_msg = vformat("%s%s%s%s%s\033[0m",
 				get_color_code(level),
 				get_timestamp(),
-				get_level_prefix(level),
 				code_pos,
+				get_level_prefix(level),
 				msg);
 		print_line(full_msg);
 	}
@@ -79,24 +68,20 @@ private:
 	LogLevel min_level = LOG_LEVEL_DEBUG;
 
 	const char *get_color_code(LogLevel level) {
-#if defined(__linux__) || defined(__APPLE__)
 		switch (level) {
-			case DEBUG:
+			case LOG_LEVEL_DEBUG:
 				return "\033[36m"; // Cyan
-			case INFO:
+			case LOG_LEVEL_INFO:
 				return "\033[32m"; // Green
-			case WARNING:
+			case LOG_LEVEL_WARNING:
 				return "\033[33m"; // Yellow
-			case ERROR:
+			case LOG_LEVEL_ERROR:
 				return "\033[31m"; // Red
-			case FATAL:
+			case LOG_LEVEL_FATAL:
 				return "\033[35m"; // Magenta
 			default:
 				return "\033[0m";
 		}
-#else
-		return "";
-#endif
 	}
 
 	const char *get_level_prefix(LogLevel level) {
