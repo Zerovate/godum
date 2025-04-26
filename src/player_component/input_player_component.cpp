@@ -1,6 +1,6 @@
 #include "input_player_component.h"
 
-#include "input/input_device_pc.h"
+#include "core/logger.hpp"
 #include "player/player.h"
 
 #ifdef GODUM_MODULE
@@ -44,7 +44,7 @@ void InputPlayerComponent::register_device_actions(TypedArray<StringName> p_acti
 			for (int j = 0; j < filtered_events.size(); j++) {
 				input_map->action_add_event(action_ext, filtered_events[j]);
 			}
-			print_line("InputMap add action: ", action, "-> ", action_ext);
+			LOG_DEBUG(vformat("InputMap add action: %s-> %s", action, action_ext));
 		}
 		m_device_action_map[action] = action_ext;
 	}

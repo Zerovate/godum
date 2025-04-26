@@ -9,6 +9,7 @@
 #endif
 
 #include "core/component.h"
+#include "core/logger.hpp"
 #include "entity/entity_component.h"
 #include "entity/entity_manager.h"
 #include "entity/entity_proxy.h"
@@ -34,6 +35,7 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	LOG_SET_LEVEL(LOG_LEVEL_INFO);
 #ifdef GODUM_SUPPORT_STEAM
 	initialize_steam_multiplayer_peer(p_level);
 #endif

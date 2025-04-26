@@ -1,4 +1,5 @@
 #include "component.h"
+#include "core/logger.hpp"
 
 #ifdef GODUM_MODULE
 #include <core/config/engine.h>
@@ -20,7 +21,7 @@ void Component::_enter_tree() {
 			CRASH_NOW_MSG(vformat("Component %s has no actor", get_path()));
 		}
 	} else {
-		print_line(vformat("Component %s bind actor %s", get_name(), actor->get_name()));
+		LOG_DEBUG(vformat("%s bind actor %s", get_name(), actor->get_name()));
 	}
 	set_actor(actor);
 }
