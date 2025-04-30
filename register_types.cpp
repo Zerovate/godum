@@ -15,7 +15,6 @@
 #include "entity/entity_proxy.h"
 #include "game_instance/game_instance.h"
 #include "game_instance/gi_component.h"
-#include "game_instance/session_gi_component.h"
 #include "input/enhanced_input_map.h"
 #include "input/input_device.h"
 #include "player/player.h"
@@ -46,7 +45,6 @@ void initialize_godum_module(ModuleInitializationLevel p_level) {
 
 	GDREGISTER_CLASS(GameInstance);
 	GDREGISTER_CLASS(GIComponent);
-	GDREGISTER_CLASS(SessionGIComponent);
 
 	GDREGISTER_CLASS(EnhancedInputMap);
 	GDREGISTER_CLASS(InputDevice);

@@ -67,7 +67,7 @@ Ref<InputDevice> InputPlayerComponent::_get_device() const {
 	if (!player) {
 		return nullptr;
 	}
-	if (!player->get_role() == Player::Role::ROLE_Local) {
+	if (player->get_role() != Player::Role::ROLE_Local) {
 		return nullptr;
 	}
 	return player->get_input_device();

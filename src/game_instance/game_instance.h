@@ -26,9 +26,10 @@ public:
 	static GameInstance *get_singleton();
 
 	WorldNode *get_world() const;
+	void set_world(WorldNode* world);
 
 private:
-	WorldNode *world = nullptr;
+	WorldNode *m_world = nullptr;
 
 protected:
 	static void _bind_methods();

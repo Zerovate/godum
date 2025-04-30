@@ -9,10 +9,10 @@ public:
 	EntityProxy(Node *entity);
 	~EntityProxy();
 
-	_FORCE_INLINE_ Node *get_entity() const;
+	Node *get_entity() const;
 
-	_FORCE_INLINE_ Player *get_player() const;
-	_FORCE_INLINE_ void set_player(Player *player);
+	Player *get_player() const;
+	void set_player(Player *player);
 
 private:
 	Node *m_entity;

@@ -3,7 +3,7 @@
 
 EntityProxy::EntityProxy(Node *entity) :
 		m_entity(entity) {
-	_ASSERT(entity);
+	DEV_ASSERT(entity);
 	if (_try_find_player()) {
 		m_player->register_pawn(this);
 	}

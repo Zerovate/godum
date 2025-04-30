@@ -19,6 +19,15 @@ class WorldNode : public Node, public ComponentHolder<WorldComponent> {
 public:
 	WorldNode();
 
+public:
+	void _enter_tree();
+	void _exit_tree();
+
+protected:
+#ifdef GODUM_MODULE
+	void _notification(int p_what);
+#endif
+
 protected:
 	static void _bind_methods();
 };

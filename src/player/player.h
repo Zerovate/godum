@@ -37,6 +37,14 @@ public:
 	Ref<InputDevice> get_input_device() const;
 	void set_input_device(const Ref<InputDevice> &device);
 
+public:
+	void _enter_tree();
+
+protected:
+#ifdef GODUM_MODULE
+	void _notification(int p_what);
+#endif
+
 protected:
 	Role m_role = ROLE_None;
 	Ref<InputDevice> m_input_device;

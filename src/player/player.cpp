@@ -1,6 +1,7 @@
 #include "player.h"
 #include "entity/entity_proxy.h"
 #include "input/input_device.h"
+#include <scene/main/multiplayer_api.h>
 
 TypedArray<Node> Player::get_pawns() const {
 	TypedArray<Node> res;
@@ -32,6 +33,24 @@ Ref<InputDevice> Player::get_input_device() const {
 void Player::set_input_device(const Ref<InputDevice> &device) {
 	m_input_device = device;
 }
+
+void Player::_enter_tree() {
+	if (!get_multiplayer().is_null() && (get_multiplayer()->get_unique_id() != get_multiplayer_authority())) {
+		m_role = ROLE_Remote;
+	} else {
+		m_role = ROLE_Local;
+	}
+}
+
+#ifdef GODUM_MODULE
+void Player::_notification(int p_what) {
+	switch (p_what) {
+		case NOTIFICATION_ENTER_TREE: {
+			_enter_tree();
+		} break;
+	}
+}
+#endif
 
 void Player::_bind_methods() {
 	COMPONENT_HOLDER_BIND_METHODS(Player);
