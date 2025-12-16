@@ -1,5 +1,5 @@
 #include "game_instance.h"
-#include "world/world_node.h"
+#include "../world/world_node.h"
 
 #ifdef GODUM_MODULE
 #include "core/object/class_db.h"

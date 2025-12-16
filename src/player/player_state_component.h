@@ -1,5 +1,5 @@
 #pragma once
-#include "player_component.h"
+#include "../player_component/player_component.h"
 
 class PlayerStateComponent : public PlayerComponent {
 	GDCLASS(PlayerStateComponent, PlayerComponent);

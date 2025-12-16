@@ -1,7 +1,7 @@
 #include "input_player_component.h"
 
-#include "core/logger.hpp"
-#include "player/player.h"
+#include "../core/logger.hpp"
+#include "../player/player.h"
 
 #ifdef GODUM_MODULE
 #include <core/input/input_map.h>

@@ -17,8 +17,6 @@ VariantDir('build', 'src', duplicate=0)
 # - CPPDEFINES are for pre-processor defines
 # - LINKFLAGS are for linking flags
 
-env.Append(CPPDEFINES=["GODUM_GDEXTENSION"])
-
 env.Append(CPPPATH=["src"])
 
 def getSubdirs(path:str):

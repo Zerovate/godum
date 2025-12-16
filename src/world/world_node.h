@@ -1,5 +1,5 @@
 #pragma once
-#include "core/component_holder.h"
+#include "../core/component_holder.h"
 
 #include "world_component.h"
 

@@ -1,5 +1,5 @@
 #include "entity_proxy.h"
-#include "player/player.h"
+#include "../player/player.h"
 
 EntityProxy::EntityProxy(Node *entity) :
 		m_entity(entity) {

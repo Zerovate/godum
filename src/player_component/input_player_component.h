@@ -1,7 +1,7 @@
 #pragma once
 #include "player_component.h"
 
-#include "input/input_device.h"
+#include "../input/input_device.h"
 
 #ifdef GODUM_MODULE
 #include <core/input/input_event.h>

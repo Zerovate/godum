@@ -1,5 +1,5 @@
 #include "world_node.h"
-#include "game_instance/game_instance.h"
+#include "../game_instance/game_instance.h"
 
 WorldNode::WorldNode() {
 }

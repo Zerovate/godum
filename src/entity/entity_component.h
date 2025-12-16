@@ -1,5 +1,5 @@
 #pragma once
-#include "core/component.h"
+#include "../core/component.h"
 
 class EntityProxy;
 

@@ -1,10 +1,10 @@
 #include "enhanced_input_map.h"
 
-#include "entity/entity_component.h"
-#include "entity/entity_manager.h"
-#include "entity/entity_proxy.h"
-#include "player/player.h"
-#include "player_component/input_player_component.h"
+#include "../entity/entity_component.h"
+#include "../entity/entity_manager.h"
+#include "../entity/entity_proxy.h"
+#include "../player/player.h"
+#include "../player_component/input_player_component.h"
 
 bool EnhancedInputMap::bind_action(const StringName &p_action, const Callable &p_callback) {
 	bool success = false;

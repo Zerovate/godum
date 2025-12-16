@@ -14,7 +14,6 @@ module_path = Dir('.').srcnode().abspath
 module_env = env.Clone()
 
 module_env.Append(CPPDEFINES=["GODUM_MODULE"])
-module_env.Append(CPPPATH=["src"])
 
 support_steam = env.GetOption('support_steam') or 'false'
 support_steam = support_steam.lower() == 'true'

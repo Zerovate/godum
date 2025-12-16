@@ -9,35 +9,35 @@ using namespace godot;
 #endif // GODUM_GDEXTENSION
 
 class Component : public Node {
-	GDCLASS(Component, Node);
+  GDCLASS(Component, Node);
 
 public:
-	void set_actor(Node *p_actor);
-	Node *get_actor() const;
+  void set_actor(Node *p_actor);
+  Node *get_actor() const;
 
-	GDVIRTUAL0R(StringName, type);
-	GDVIRTUAL0R(bool, is_unique);
+  GDVIRTUAL0R(StringName, type);
+  GDVIRTUAL0R(bool, is_unique);
 
 public:
-	void _enter_tree();
-	void _exit_tree();
+  void _enter_tree();
+  void _exit_tree();
 
 protected:
 #ifdef GODUM_MODULE
-	void _notification(int p_what);
+  void _notification(int p_what);
 #endif
 
-	Node *m_actor = nullptr;
+  Node *m_actor = nullptr;
 
-	Vector<StringName> m_support_actor_types = {};
-	Vector<StringName> m_unsupport_actor_types = {};
+  Vector<StringName> m_support_actor_types = {};
+  Vector<StringName> m_unsupport_actor_types = {};
 
-	bool m_find_actor_by_tree = true;
+  bool m_find_actor_by_tree = true;
 
 private:
-	bool _is_actor_type_valid(Node *p_actor);
-	Node *_try_find_actor();
+  bool _is_actor_type_valid(Node *p_actor);
+  Node *_try_find_actor();
 
 protected:
-	static void _bind_methods();
+  static void _bind_methods();
 };

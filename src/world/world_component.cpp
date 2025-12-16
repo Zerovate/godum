@@ -1,6 +1,6 @@
 #include "world_component.h"
 
-#include "world/world_node.h"
+#include "../world/world_node.h"
 
 WorldComponent::WorldComponent() {
 	// only WorldNode2D or WorldNode3D (for node tidy) can be parent.

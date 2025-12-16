@@ -1,6 +1,6 @@
 #pragma once
-#include "core/component_holder.h"
-#include "player_component/player_component.h"
+#include "../core/component_holder.h"
+#include "../player_component/player_component.h"
 
 #ifdef GODUM_MODULE
 #include <scene/main/node.h>

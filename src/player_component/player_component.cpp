@@ -1,6 +1,6 @@
 #include "player_component.h"
 
-#include "player/player.h"
+#include "../player/player.h"
 
 #ifdef GODUM_MODULE
 #include <core/config/engine.h>

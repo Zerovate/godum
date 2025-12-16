@@ -1,6 +1,6 @@
 #include "player.h"
-#include "entity/entity_proxy.h"
-#include "input/input_device.h"
+#include "../entity/entity_proxy.h"
+#include "../input/input_device.h"
 #include <scene/main/multiplayer_api.h>
 
 TypedArray<Node> Player::get_pawns() const {

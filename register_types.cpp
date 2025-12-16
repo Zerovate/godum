@@ -8,23 +8,23 @@
 #include <godot_cpp/classes/engine.hpp>
 #endif
 
-#include "core/component.h"
-#include "core/logger.hpp"
-#include "entity/entity_component.h"
-#include "entity/entity_manager.h"
-#include "entity/entity_proxy.h"
-#include "game_instance/game_instance.h"
-#include "game_instance/gi_component.h"
-#include "input/enhanced_input_map.h"
-#include "input/input_device.h"
-#include "player/player.h"
-#include "player_component/input_player_component.h"
-#include "player_component/player_component.h"
+#include "src/core/component.h"
+#include "src/core/logger.hpp"
+#include "src/entity/entity_component.h"
+#include "src/entity/entity_manager.h"
+#include "src/entity/entity_proxy.h"
+#include "src/game_instance/game_instance.h"
+#include "src/game_instance/gi_component.h"
+#include "src/input/enhanced_input_map.h"
+#include "src/input/input_device.h"
+#include "src/player/player.h"
+#include "src/player_component/input_player_component.h"
+#include "src/player_component/player_component.h"
 #ifdef GODUM_SUPPORT_STEAM
 #include "steam_multiplayer_peer/register_types.h"
 #endif
-#include "world/world_component.h"
-#include "world/world_node.h"
+#include "src/world/world_component.h"
+#include "src/world/world_node.h"
 
 static GameInstance *_game_instance = nullptr;
 static EntityManager *_entity_component_manager = nullptr;
